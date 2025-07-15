@@ -1,0 +1,41 @@
+/* Reset and base */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #4fc3f7;
+  --dark: #111;
+  --light: #f4f4f4;
+  --font-base: 'Roboto', sans-serif;
+  --radius: 0.5rem;
+}
+
+body {
+  font-family: var(--font-base);
+  color: var(--dark);
+  background-color: var(--light);
+  line-height: 1.6;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #111;
+    color: #eee;
+  }
+}
+
+/* Responsiveness */
+@media (max-width: 360px) {
+  .stream-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .stream-preview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

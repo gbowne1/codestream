@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#111" />
+  <meta name="description" content="Live streaming platform for developers." />
+  <meta name="author" content="gbowne1" />
+
+  <!-- OpenGraph Meta -->
+  <meta property="og:title" content="DevStream" />
+  <meta property="og:description" content="Stream your code and game dev live." />
+  <meta property="og:image" content="/src/assets/images/banner.jpg" />
+  <meta property="og:url" content="https://yourdomain.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Icons + Fonts -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" />
+  <link rel="stylesheet" href="/src/css/style.css" />
+
+  <script defer src="/src/js/main.js"></script>
+  <title>DevStream | Live Coding & Game Dev</title>
+</head>
+
+<body class="bg-light text-dark dark:bg-black dark:text-white">
+  <header class="sticky-top bg-white dark:bg-gray-900 shadow z-10">
+    <div class="container d-flex justify-content-between align-items-center py-3">
+      <h1 class="h3 mb-0">DevStream</h1>
+      <nav aria-label="Main Navigation">
+        <ul class="nav gap-3">
+          <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Browse</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Schedule</a></li>
+          <li class="nav-item"><button id="drawerToggle" class="btn btn-sm btn-outline-secondary">☰</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Off-canvas drawer -->
+  <aside id="categoryDrawer" class="position-fixed top-0 start-0 h-100 bg-dark text-white p-4 shadow-lg" style="width: 260px; display: none; z-index: 1050;">
+    <h2 class="h5">Categories</h2>
+    <ul class="list-unstyled">
+      <li><a href="#" class="text-white d-block py-1">Game Development</a></li>
+      <li><a href="#" class="text-white d-block py-1">Software Development</a></li>
+      <li><a href="#" class="text-white d-block py-1">Operating System Dev</a></li>
+      <li><a href="#" class="text-white d-block py-1">Web Development</a></li>
+      <li><a href="#" class="text-white d-block py-1">Mobile Development</a></li>
+      <li><a href="#" class="text-white d-block py-1">Hacking & Cybersecurity</a></li>
+      <li><a href="#" class="text-white d-block py-1">Game Art / PixelArt</a></li>
+      <li><a href="#" class="text-white d-block py-1">Leetcode & Co-Working</a></li>
+    </ul>
+  </aside>
+
+  <main class="container mt-4">
+    <section class="mb-5" aria-labelledby="trending">
+      <h2 id="trending" class="mb-3 h4">Live Streams</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Stream preview card -->
+        <article class="col">
+          <div class="card shadow-sm">
+            <img src="/src/assets/images/preview-placeholder.jpg" class="card-img-top" width="300" height="175" alt="Live stream preview" />
+            <div class="card-body">
+              <h3 class="card-title h6">Live: Building an x86 Kernel</h3>
+              <p class="card-text text-muted mb-1">@codegrinder</p>
+              <span class="badge bg-primary">C / C++</span>
+              <span class="badge bg-success">Operating System</span>
+              <span class="badge bg-info text-dark">Chill</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- More cards... (repeat above for sample/demo data) -->
+      </div>
+    </section>
+
+    <!-- Tags section -->
+    <section aria-labelledby="tags">
+      <h2 id="tags" class="h5 mb-3">Tags</h2>
+      <div class="d-flex flex-wrap gap-2">
+        <!-- Programming language tags -->
+        <span class="badge bg-secondary">C++</span>
+        <span class="badge bg-secondary">Python</span>
+        <span class="badge bg-secondary">JavaScript</span>
+        <!-- Framework tags -->
+        <span class="badge bg-dark">React</span>
+        <span class="badge bg-dark">Django</span>
+        <span class="badge bg-dark">Vue</span>
+        <!-- Vibe tags -->
+        <span class="badge bg-warning text-dark">Chill</span>
+        <span class="badge bg-warning text-dark">420</span>
+        <span class="badge bg-warning text-dark">ADHD</span>
+        <!-- OS tags -->
+        <span class="badge bg-light text-dark border">Linux</span>
+        <span class="badge bg-light text-dark border">Windows</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-4 mt-5 bg-body-tertiary">
+    <p class="mb-0">&copy; 2025 DevStream. All rights reserved.</p>
+  </footer>
+
+  <!-- Drawer toggle script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const drawer = document.getElementById("categoryDrawer");
+      document.getElementById("drawerToggle").addEventListener("click", () => {
+        drawer.style.display = drawer.style.display === "none" ? "block" : "none";
+      });
+    });
+  </script>
+</body>
+</html>
