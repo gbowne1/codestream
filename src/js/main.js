@@ -3,8 +3,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const drawerToggle = document.getElementById("drawerToggle");
   const drawer = document.getElementById("categoryDrawer");
+  const drawerClose = document.getElementById("drawerClose");
 
-  // Toggle off-canvas drawer
+  // Toggle drawer open/close
   drawerToggle.addEventListener("click", () => {
     if (drawer.classList.contains("open")) {
       drawer.classList.remove("open");
@@ -15,13 +16,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Close drawer when clicking outside
+  // Close drawer by clicking outside
   document.addEventListener("click", (e) => {
     if (!drawer.contains(e.target) && !drawerToggle.contains(e.target)) {
       drawer.classList.remove("open");
       drawer.style.display = "none";
     }
   });
+
+  // Close drawer with close (×) button
+  drawerClose.addEventListener("click", () => {
+    drawer.classList.remove("open");
+    drawer.style.display = "none";
+  });
+
 
   // 🌙 Theme toggle
   const themeToggle = document.getElementById("themeToggle");
