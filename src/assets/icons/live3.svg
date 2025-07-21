@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 100 30">
+  <circle cx="15" cy="15" r="15" fill="red" />
+  <circle cx="15" cy="15" r="14" fill="none" stroke="white" stroke-width="2" />
+  <text x="15" y="20" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Live</text>
+</svg>
