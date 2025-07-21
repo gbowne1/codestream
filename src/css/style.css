@@ -12,38 +12,62 @@
   --primary: #4fc3f7;
   --dark: #111;
   --light: #f4f4f4;
-  --font-base: 'Roboto', sans-serif;
+  --dark-gray: #333; /* Dark gray for dark mode */
+  --light-gray: #f0f0f0; /* Light gray for light mode */
   --radius: 0.5rem;
 }
 
 body {
   font-family: var(--font-base);
   color: var(--dark);
-  background-color: var(--light);
+  background-color: var(--light); /* Light mode background */
   line-height: 1.6;
 }
 
 body.dark {
-  background-color: var(--dark);
+  background-color: var(--dark); /* Dark mode background */
   color: var(--light);
 }
 
-body.dark .card {
-  background-color: #1a1a1a;
-  color: #eee;
+/* Header and Footer Styles */
+header {
+  background-color: var(--light); /* Light mode header background */
+  color: var(--dark); /* Light mode text color */
 }
 
-body.dark .card .card-text {
-  color: #ccc;
+footer {
+  background-color: var(--light); /* Light mode footer background */
+  color: var(--dark); /* Light mode text color */
 }
 
-body.dark .badge {
-  border-color: rgba(255, 255, 255, 0.15);
+/* Dark Mode Styles */
+body.dark header {
+  background-color: var(--dark-gray); /* Dark mode header background */
+  color: #fff; /* Dark mode text color */
 }
 
 body.dark footer {
-  background-color: #222;
-  color: #ccc;
+  background-color: var(--dark-gray); /* Dark mode footer background */
+  color: #fff; /* Dark mode text color */
+}
+
+/* Card Styles */
+.card {
+  background-color: #fff; /* Light mode card background */
+  color: var(--dark); /* Light mode card text color */
+}
+
+body.dark .card {
+  background-color: var(--dark-gray); /* Dark mode card background */
+  color: #eee; /* Dark mode card text color */
+}
+
+.card-text {
+  color: #555; /* Default text color for better contrast */
+}
+
+body.dark .card-text {
+  color: #ccc; /* Dark mode text color for better visibility */
 }
 
 #categoryDrawer {
@@ -56,14 +80,19 @@ body.dark footer {
 }
 
 .column-gap {
-  column-gap: 1rem; /* Adjust the value as needed */
   -moz-column-gap: 1rem; /* For older versions of Firefox */
+  column-gap: 1rem; /* Adjust the value as needed */
 }
 
+body.dark .badge {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Media Queries */
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #111;
-    color: #eee;
+    background-color: #111; /* Dark mode body background */
+    color: #eee; /* Dark mode text color */
   }
 }
 
