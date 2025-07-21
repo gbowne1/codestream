@@ -23,6 +23,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // 🌙 Theme toggle
+  const themeToggle = document.getElementById("themeToggle");
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const storedTheme = localStorage.getItem("theme");
+
+  if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
+  }
+
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+
+    const icon = themeToggle.querySelector("i");
+    icon.classList.toggle("fa-moon", !isDark);
+    icon.classList.toggle("fa-sun", isDark);
+  });
+
   // Placeholder stream data for testing (replace with dynamic loading later)
   const streamData = [
     {
