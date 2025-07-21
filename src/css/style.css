@@ -52,6 +52,11 @@ body.dark footer {
   transform: translateX(0);
 }
 
+.column-gap {
+  column-gap: 1rem; /* Adjust the value as needed */
+  -moz-column-gap: 1rem; /* For older versions of Firefox */
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #111;
