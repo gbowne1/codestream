@@ -50,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const icon = themeToggle.querySelector("i");
     icon.classList.toggle("fa-moon", !isDark);
     icon.classList.toggle("fa-sun", isDark);
+
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    themeColorMeta.setAttribute('content', isDark ? '#222' : '#f4f4f4');
   });
 
   // 🎥 Stream data
@@ -116,3 +119,15 @@ document.addEventListener("DOMContentLoaded", () => {
     renderStreams(streamData);
   });
 });
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js")
+            .then(registration => {
+                console.log("Service Worker registered:", registration);
+            })
+            .catch(error => {
+                console.error("Service Worker registration failed:", error);
+            });
+    });
+}
