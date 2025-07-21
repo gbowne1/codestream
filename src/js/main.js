@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Optional: close drawer when clicking outside
+  // Close drawer when clicking outside
   document.addEventListener("click", (e) => {
     if (!drawer.contains(e.target) && !drawerToggle.contains(e.target)) {
       drawer.classList.remove("open");
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     icon.classList.toggle("fa-sun", isDark);
   });
 
-  // Placeholder stream data for testing (replace with dynamic loading later)
+  // 🎥 Stream data
   const streamData = [
     {
       title: "Live: Building a C++ Game Engine",
@@ -68,18 +68,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const previewContainer = document.querySelector(".row");
 
-  streamData.forEach((stream) => {
-    const card = document.createElement("article");
-    card.className = "col";
-    card.innerHTML = `
-      <div class="card shadow-sm">
-        <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Stream Preview" />
-        <div class="card-body">
-          <h3 class="card-title h6">${stream.title}</h3>
-          <p class="card-text text-muted mb-1">${stream.user}</p>
-          ${stream.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join('')}
-        </div>
-      </div>`;
-    previewContainer.appendChild(card);
+  // 🔁 Render function (used for initial render and filtered results)
+  function renderStreams(streams) {
+    previewContainer.innerHTML = ""; // Clear existing
+    streams.forEach((stream) => {
+      const card = document.createElement("article");
+      card.className = "col";
+      card.innerHTML = `
+        <div class="card shadow-sm">
+          <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Stream Preview" />
+          <div class="card-body">
+            <h3 class="card-title h6">${stream.title}</h3>
+            <p class="card-text text-muted mb-1">${stream.user}</p>
+            ${stream.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join('')}
+          </div>
+        </div>`;
+      previewContainer.appendChild(card);
+    });
+  }
+
+  // Initial render
+  renderStreams(streamData);
+
+  // 🔍 Search functionality
+  const searchInput = document.getElementById("searchInput");
+  const clearSearch = document.getElementById("clearSearch");
+
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+    const filtered = streamData.filter(stream =>
+      stream.title.toLowerCase().includes(term) ||
+      stream.tags.some(tag => tag.toLowerCase().includes(term))
+    );
+    renderStreams(filtered);
+  });
+
+  clearSearch.addEventListener("click", () => {
+    searchInput.value = "";
+    renderStreams(streamData);
   });
 });
