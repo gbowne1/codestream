@@ -1,4 +1,4 @@
-// sw.js
+// service-worker.js
 const CACHE_NAME = "devstream-v1";
 
 // List of resources to cache
