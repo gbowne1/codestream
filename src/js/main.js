@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.className = "col";
       card.innerHTML = `
         <div class="card shadow-sm">
-          <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Stream Preview" />
+          <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Preview of ${stream.title}" />
           <div class="card-body">
             <h3 class="card-title h6">${stream.title}</h3>
             <p class="card-text text-muted mb-1">${stream.user}</p>
@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const term = searchInput.value.toLowerCase();
     const filtered = streamData.filter(stream =>
       stream.title.toLowerCase().includes(term) ||
+      stream.user.toLowerCase().includes(term) || 
       stream.tags.some(tag => tag.toLowerCase().includes(term))
     );
     renderStreams(filtered);

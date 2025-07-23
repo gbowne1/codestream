@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+    font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com data:;
+    img-src 'self' data:;
+    object-src 'none';
+  " />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#111" />
   <meta name="description" content="Live streaming platform for developers." />
@@ -75,7 +84,7 @@
         <!-- Stream preview card -->
         <article class="col"> 
           <div class="card shadow-sm">
-            <img src="/src/assets/images/preview-placeholder.jpg" loading="lazy" class="card-img-top" width="300" height="175" alt="Live stream preview" />
+            <img src="${stream.img}" loading="lazy" class="card-img-top" width="300" height="175" alt="Preview of ${stream.title}" />
             <div class="card-body">
               <h3 class="card-title h6">Live: Building an x86 Kernel</h3>
               <p class="card-text text-muted mb-1">@codegrinder</p>
