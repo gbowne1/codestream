@@ -61,19 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Live: Building a C++ Game Engine",
       user: "@gamedevgeek",
       tags: ["C++", "Game Dev", "Unreal"],
-      img: "/src/assets/images/preview-placeholder.jpg"
+      img: "/src/assets/images/preview-placeholder.jpg",
+      viewers: 1247
     },
     {
       title: "Exploring Python Async IO",
       user: "@pycoder",
       tags: ["Python", "Web Dev", "Chill"],
-      img: "/src/assets/images/preview-placeholder.jpg"
+      img: "/src/assets/images/preview-placeholder.jpg",
+      viewers: 1247
     },
     {
       title: "Working on My OS Kernel",
       user: "@baremetal",
       tags: ["C", "x86", "Kernel"],
-      img: "/src/assets/images/preview-placeholder.jpg"
+      img: "/src/assets/images/preview-placeholder.jpg",
+      viewers: 1247
     }
   ];
 
@@ -86,14 +89,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("article");
       card.className = "col";
       card.innerHTML = `
-        <div class="card shadow-sm">
-          <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Preview of ${stream.title}" />
-          <div class="card-body">
-            <h3 class="card-title h6">${stream.title}</h3>
-            <p class="card-text text-muted mb-1">${stream.user}</p>
-            ${stream.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join('')}
-          </div>
-        </div>`;
+         <div class="card shadow-sm">
+        <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Stream Preview" />
+        <div class="card-body">
+          <h3 class="card-title h6">${stream.title}</h3>
+          <p class="card-text text-muted mb-1">${stream.user}</p>
+          <p class="viewer-count text-muted small mb-2">
+            <i class="fas fa-eye"></i> ${stream.viewers.toLocaleString()} viewers
+          </p>
+          ${stream.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join('')}
+        </div>
+      </div>`;
       previewContainer.appendChild(card);
     });
   }
