@@ -5,54 +5,87 @@ document.addEventListener("DOMContentLoaded", () => {
   const drawer = document.getElementById("categoryDrawer");
   const drawerClose = document.getElementById("drawerClose");
 
+  // Function to update drawer state
+  const updateDrawerState = (isOpen) => {
+    if (isOpen) {
+      drawer.classList.add("open");
+      drawerToggle.setAttribute('aria-expanded', 'true');
+    } else {
+      drawer.classList.remove("open");
+      drawerToggle.setAttribute('aria-expanded', 'false');
+    }
+  };
+
   // Toggle drawer open/close
   drawerToggle.addEventListener("click", () => {
-    if (drawer.classList.contains("open")) {
-      drawer.classList.remove("open");
-      drawer.style.display = "none";
-    } else {
-      drawer.classList.add("open");
-      drawer.style.display = "block";
-    }
+    const isOpen = drawer.classList.contains("open");
+    updateDrawerState(!isOpen);
   });
 
   // Close drawer by clicking outside
   document.addEventListener("click", (e) => {
-    if (!drawer.contains(e.target) && !drawerToggle.contains(e.target)) {
-      drawer.classList.remove("open");
-      drawer.style.display = "none";
+    // Ensure drawer is open before trying to close by outside click
+    if (drawer.classList.contains("open") && !drawer.contains(e.target) && !drawerToggle.contains(e.target)) {
+      updateDrawerState(false);
     }
   });
 
   // Close drawer with close (×) button
   drawerClose.addEventListener("click", () => {
-    drawer.classList.remove("open");
-    drawer.style.display = "none";
+    updateDrawerState(false);
   });
-
 
   // 🌙 Theme toggle
   const themeToggle = document.getElementById("themeToggle");
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)'); // Get the MediaQueryList object
   const storedTheme = localStorage.getItem("theme");
 
-  if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
-    document.body.classList.add("dark");
-  } else {
-    document.body.classList.remove("dark");
-  }
+  // Function to apply/remove dark mode class and update meta tag/icon
+  const applyTheme = (isDark) => {
+    if (isDark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
 
-  themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    const isDark = document.body.classList.contains("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-
+    // Update theme toggle icon
     const icon = themeToggle.querySelector("i");
     icon.classList.toggle("fa-moon", !isDark);
     icon.classList.toggle("fa-sun", isDark);
 
+    // Update theme-color meta tag
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     themeColorMeta.setAttribute('content', isDark ? '#222' : '#f4f4f4');
+  };
+
+  // Determine initial theme on page load
+  let initialIsDark = false;
+  if (storedTheme === "dark") {
+    initialIsDark = true;
+  } else if (storedTheme === "light") {
+    initialIsDark = false;
+  } else { // No stored theme, use system preference
+    initialIsDark = prefersDark.matches;
+  }
+  applyTheme(initialIsDark);
+
+
+  // Listen for changes in system theme preference (e.g., user changes OS theme)
+  prefersDark.addEventListener('change', (event) => {
+    // Only auto-switch if no theme preference is explicitly stored
+    if (!localStorage.getItem("theme")) {
+      applyTheme(event.matches);
+    }
+  });
+
+
+  // Handle manual theme toggle button click
+  themeToggle.addEventListener("click", () => {
+    const isCurrentlyDark = document.body.classList.contains("dark");
+    const newThemeIsDark = !isCurrentlyDark; // Toggle the state
+    
+    localStorage.setItem("theme", newThemeIsDark ? "dark" : "light"); // Store user preference
+    applyTheme(newThemeIsDark); // Apply the new theme
   });
 
   // 🎥 Stream data
