@@ -37,8 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🌙 Theme toggle
   const themeToggle = document.getElementById("themeToggle");
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)'); // Get the MediaQueryList object
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
   const storedTheme = localStorage.getItem("theme");
+
+  // Define the actual colors to be used for the theme-color meta tag
+  const LIGHT_THEME_COLOR = "#ffffff"; // Or "#f4f4f4" if that's your preferred light status bar color
+  const DARK_THEME_COLOR = "#111111"; // Or "#222222" if that matches your dark header
 
   // Function to apply/remove dark mode class and update meta tag/icon
   const applyTheme = (isDark) => {
@@ -50,12 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update theme toggle icon
     const icon = themeToggle.querySelector("i");
-    icon.classList.toggle("fa-moon", !isDark);
-    icon.classList.toggle("fa-sun", isDark);
+    icon.classList.toggle("fa-moon", !isDark); // If not dark, show moon (for light mode)
+    icon.classList.toggle("fa-sun", isDark);   // If dark, show sun (for dark mode)
 
-    // Update theme-color meta tag
+    // Update theme-color meta tag based on current theme
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    themeColorMeta.setAttribute('content', isDark ? '#222' : '#f4f4f4');
+    if (themeColorMeta) { // Check if the meta tag exists
+      themeColorMeta.setAttribute('content', isDark ? DARK_THEME_COLOR : LIGHT_THEME_COLOR);
+    }
   };
 
   // Determine initial theme on page load
@@ -83,12 +89,12 @@ document.addEventListener("DOMContentLoaded", () => {
   themeToggle.addEventListener("click", () => {
     const isCurrentlyDark = document.body.classList.contains("dark");
     const newThemeIsDark = !isCurrentlyDark; // Toggle the state
-    
+
     localStorage.setItem("theme", newThemeIsDark ? "dark" : "light"); // Store user preference
     applyTheme(newThemeIsDark); // Apply the new theme
   });
 
-  // 🎥 Stream data
+  // 🎥 Stream data (rest of your stream logic...)
   const streamData = [
     {
       title: "Live: Building a C++ Game Engine",
@@ -148,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const term = searchInput.value.toLowerCase();
     const filtered = streamData.filter(stream =>
       stream.title.toLowerCase().includes(term) ||
-      stream.user.toLowerCase().includes(term) || 
+      stream.user.toLowerCase().includes(term) ||
       stream.tags.some(tag => tag.toLowerCase().includes(term))
     );
     renderStreams(filtered);

@@ -5,8 +5,8 @@
   "description": "Live streaming platform for developers and game devs.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111111",
-  "theme_color": "#111111",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "scope": "/",
   "icons": [
     {

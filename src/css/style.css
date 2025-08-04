@@ -45,8 +45,8 @@ body.dark {
 
 /* Header */
 header {
-  background-color: var(--color-header-bg); /* Use variable */
-  color: var(--color-header-text); /* Use variable */
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
 }
 
 /* Navigation links within the header */
@@ -56,8 +56,8 @@ header .nav-link {
 
 /* Footer */
 footer {
-  background-color: var(--color-footer-bg); /* Use variable */
-  color: var(--color-footer-text); /* Use variable */
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
 }
 
 
@@ -130,69 +130,22 @@ body.dark .badge {
 * by the `body.dark` class if the user manually toggles the theme.
 */
 @media (prefers-color-scheme: dark) {
-    :root {
-        /* Set dark mode variables as defaults when system prefers dark */
-        --color-background: #111;
-        --color-text: #eee;
-        --color-card-bg: #222;
-        --color-card-text: #eee;
-        --color-header-bg: #222;
-        --color-header-text: #eee;
-        --color-footer-bg: #222;
-        --color-footer-text: #eee;
-    }
-
-    body {
-        /* Ensure body adopts these preferences */
-        background-color: var(--color-background);
-        color: var(--color-text);
-    }
-
-    /* Apply dark mode styles to header, nav links, and footer */
-    header {
-        background-color: var(--color-header-bg);
-        color: var(--color-header-text);
-    }
-
-    header .nav-link {
-        color: var(--color-header-text);
-    }
-
-    footer {
-        background-color: var(--color-footer-bg);
-        color: var(--color-footer-text);
-    }
-
-    /* Also ensure drawer adapts if opened before manual toggle */
-    #categoryDrawer {
-        background-color: #222; /* Dark background for drawer */
-        color: #eee; /* Light text for drawer */
-    }
-
-    #categoryDrawer a {
-        color: #eee; /* Light text for drawer links */
-    }
-
-    .badge.bg-primary {
-        background-color: #4fc3f7; /* Keep the light blue for badges */
-        color: #222;
-    }
-
-    .badge {
-        border-color: rgba(255, 255, 255, 0.15);
-    }
+  :root {
+    /* Set dark mode variables as defaults when system prefers dark */
+    --color-background: #111;
+    --color-text: #eee;
+    --color-card-bg: #222;
+    --color-card-text: #eee;
+    --color-header-bg: #222;
+    --color-header-text: #eee;
+    --color-footer-bg: #222;
+    --color-footer-text: #eee;
+  }
 }
-
 
 /* Responsiveness */
 @media (max-width: 360px) {
   .stream-preview {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 768px) {
-  .stream-preview {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
