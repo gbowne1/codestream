@@ -35,6 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDrawerState(false);
   });
 
+  // Close drawer with Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer.classList.contains("open")) {
+      updateDrawerState(false);
+    }
+  });
+
   // 🌙 Theme toggle
   const themeToggle = document.getElementById("themeToggle");
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
