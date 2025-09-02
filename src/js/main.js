@@ -150,7 +150,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const clearSearch = document.getElementById("clearSearch");
 
-  searchInput.addEventListener("input", () => {
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
+
+  searchInput.addEventListener("input", debounce(() => {
     const term = searchInput.value.toLowerCase();
     const filtered = streamData.filter(stream =>
       stream.title.toLowerCase().includes(term) ||
