@@ -4,8 +4,65 @@ document.addEventListener("DOMContentLoaded", () => {
   const drawerToggle = document.getElementById("drawerToggle");
   const drawer = document.getElementById("categoryDrawer");
   const drawerClose = document.getElementById("drawerClose");
+  const themeToggle = document.getElementById("themeToggle");
+  const searchInput = document.getElementById("searchInput");
+  const clearSearch = document.getElementById("clearSearch");
+  const previewContainer = document.querySelector(".row");
 
-  // Function to update drawer state
+  // Fetch streams from API
+  async function fetchStreams() {
+    try {
+      const response = await fetch('/api/streams');
+      const streamData = await response.json();
+      renderStreams(streamData);
+    } catch (error) {
+      console.error('Failed to fetch streams:', error);
+      previewContainer.innerHTML = '<p class="text-danger">Error loading streams. Please try again.</p>';
+    }
+  }
+
+  // Format viewer count
+  function formatViewers(count) {
+    if (count >= 1000) {
+      return (count / 1000).toFixed(1) + 'K';
+    }
+    return count.toLocaleString();
+  }
+
+  // Render streams
+  function renderStreams(streams) {
+    try {
+      previewContainer.innerHTML = "";
+      if (!streams.length) {
+        previewContainer.innerHTML = '<p class="text-muted">No streams found.</p>';
+        return;
+      }
+      streams.forEach((stream) => {
+        const card = document.createElement("article");
+        card.className = "col";
+        card.setAttribute("role", "article");
+        card.setAttribute("aria-label", `Stream: ${stream.title} by ${stream.user}`);
+        card.innerHTML = `
+          <div class="card shadow-sm">
+            <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Stream preview for ${stream.title}" loading="lazy" />
+            <div class="card-body">
+              <h3 class="card-title h6">${stream.title}</h3>
+              <p class="card-text text-muted mb-1">${stream.user}</p>
+              <p class="viewer-count text-muted small mb-2">
+                <i class="fas fa-eye" aria-hidden="true"></i> ${formatViewers(stream.viewers)} viewers
+              </p>
+              ${stream.tags.map(tag => `<span class="badge bg-primary">${tag}</span>`).join('')}
+            </div>
+          </div>`;
+        previewContainer.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error rendering streams:', error);
+      previewContainer.innerHTML = '<p class="text-danger">Error loading streams. Please try again.</p>';
+    }
+  }
+
+  // Drawer functionality (unchanged)
   const updateDrawerState = (isOpen) => {
     if (isOpen) {
       drawer.classList.add("open");
@@ -16,147 +73,65 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Toggle drawer open/close
   drawerToggle.addEventListener("click", () => {
     const isOpen = drawer.classList.contains("open");
     updateDrawerState(!isOpen);
   });
 
-  // Close drawer by clicking outside
   document.addEventListener("click", (e) => {
-    // Ensure drawer is open before trying to close by outside click
     if (drawer.classList.contains("open") && !drawer.contains(e.target) && !drawerToggle.contains(e.target)) {
       updateDrawerState(false);
     }
   });
 
-  // Close drawer with close (×) button
   drawerClose.addEventListener("click", () => {
     updateDrawerState(false);
   });
 
-  // Close drawer with Escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && drawer.classList.contains("open")) {
       updateDrawerState(false);
     }
   });
 
-  // 🌙 Theme toggle
-  const themeToggle = document.getElementById("themeToggle");
+  // Theme toggle (unchanged)
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
   const storedTheme = localStorage.getItem("theme");
+  const LIGHT_THEME_COLOR = "#ffffff";
+  const DARK_THEME_COLOR = "#111111";
 
-  // Define the actual colors to be used for the theme-color meta tag
-  const LIGHT_THEME_COLOR = "#ffffff"; // Or "#f4f4f4" if that's your preferred light status bar color
-  const DARK_THEME_COLOR = "#111111"; // Or "#222222" if that matches your dark header
-
-  // Function to apply/remove dark mode class and update meta tag/icon
   const applyTheme = (isDark) => {
     if (isDark) {
       document.body.classList.add("dark");
     } else {
       document.body.classList.remove("dark");
     }
-
-    // Update theme toggle icon
     const icon = themeToggle.querySelector("i");
-    icon.classList.toggle("fa-moon", !isDark); // If not dark, show moon (for light mode)
-    icon.classList.toggle("fa-sun", isDark);   // If dark, show sun (for dark mode)
-
-    // Update theme-color meta tag based on current theme
+    icon.classList.toggle("fa-moon", !isDark);
+    icon.classList.toggle("fa-sun", isDark);
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeColorMeta) { // Check if the meta tag exists
+    if (themeColorMeta) {
       themeColorMeta.setAttribute('content', isDark ? DARK_THEME_COLOR : LIGHT_THEME_COLOR);
     }
   };
 
-  // Determine initial theme on page load
-  let initialIsDark = false;
-  if (storedTheme === "dark") {
-    initialIsDark = true;
-  } else if (storedTheme === "light") {
-    initialIsDark = false;
-  } else { // No stored theme, use system preference
-    initialIsDark = prefersDark.matches;
-  }
+  let initialIsDark = storedTheme === "dark" || (!storedTheme && prefersDark.matches);
   applyTheme(initialIsDark);
 
-
-  // Listen for changes in system theme preference (e.g., user changes OS theme)
   prefersDark.addEventListener('change', (event) => {
-    // Only auto-switch if no theme preference is explicitly stored
     if (!localStorage.getItem("theme")) {
       applyTheme(event.matches);
     }
   });
 
-
-  // Handle manual theme toggle button click
   themeToggle.addEventListener("click", () => {
     const isCurrentlyDark = document.body.classList.contains("dark");
-    const newThemeIsDark = !isCurrentlyDark; // Toggle the state
-
-    localStorage.setItem("theme", newThemeIsDark ? "dark" : "light"); // Store user preference
-    applyTheme(newThemeIsDark); // Apply the new theme
+    const newThemeIsDark = !isCurrentlyDark;
+    localStorage.setItem("theme", newThemeIsDark ? "dark" : "light");
+    applyTheme(newThemeIsDark);
   });
 
-  // 🎥 Stream data (rest of your stream logic...)
-  const streamData = [
-    {
-      title: "Live: Building a C++ Game Engine",
-      user: "@gamedevgeek",
-      tags: ["C++", "Game Dev", "Unreal"],
-      img: "/src/assets/images/preview-placeholder.jpg",
-      viewers: 1247
-    },
-    {
-      title: "Exploring Python Async IO",
-      user: "@pycoder",
-      tags: ["Python", "Web Dev", "Chill"],
-      img: "/src/assets/images/preview-placeholder.jpg",
-      viewers: 1247
-    },
-    {
-      title: "Working on My OS Kernel",
-      user: "@baremetal",
-      tags: ["C", "x86", "Kernel"],
-      img: "/src/assets/images/preview-placeholder.jpg",
-      viewers: 1247
-    }
-  ];
-
-  const previewContainer = document.querySelector(".row");
-
-  // 🔁 Render function (used for initial render and filtered results)
-  function renderStreams(streams) {
-    previewContainer.innerHTML = ""; // Clear existing
-    streams.forEach((stream) => {
-      const card = document.createElement("article");
-      card.className = "col";
-      card.innerHTML = `
-         <div class="card shadow-sm">
-        <img src="${stream.img}" class="card-img-top" width="300" height="175" alt="Stream Preview" />
-        <div class="card-body">
-          <h3 class="card-title h6">${stream.title}</h3>
-          <p class="card-text text-muted mb-1">${stream.user}</p>
-          <p class="viewer-count text-muted small mb-2">
-            <i class="fas fa-eye"></i> ${stream.viewers.toLocaleString()} viewers
-          </p>
-          ${stream.tags.map(tag => `<span class="badge bg-primary me-1">${tag}</span>`).join('')}
-        </div>
-      </div>`;
-      previewContainer.appendChild(card);
-    });
-  }
-
-  // Initial render
-  renderStreams(streamData);
-
-  // 🔍 Search functionality
-  const searchInput = document.getElementById("searchInput");
-  const clearSearch = document.getElementById("clearSearch");
-
+  // Search with debounce
   function debounce(func, delay) {
     let timeout;
     return function (...args) {
@@ -173,22 +148,37 @@ document.addEventListener("DOMContentLoaded", () => {
       stream.tags.some(tag => tag.toLowerCase().includes(term))
     );
     renderStreams(filtered);
-  });
+  }, 300));
 
   clearSearch.addEventListener("click", () => {
     searchInput.value = "";
     renderStreams(streamData);
   });
+
+  // Tag filtering
+  document.querySelectorAll('.badge').forEach(badge => {
+    badge.addEventListener('click', () => {
+      const tag = badge.textContent.toLowerCase();
+      const filtered = streamData.filter(stream =>
+        stream.tags.some(t => t.toLowerCase() === tag)
+      );
+      renderStreams(filtered);
+    });
+  });
+
+  // Initial render (static for now, replace with fetchStreams for API)
+  renderStreams(streamData);
 });
 
+// Service worker registration (unchanged)
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js")
-            .then(registration => {
-                console.log("Service Worker registered:", registration);
-            })
-            .catch(error => {
-                console.error("Service Worker registration failed:", error);
-            });
-    });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(registration => {
+        console.log("Service Worker registered:", registration);
+      })
+      .catch(error => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
 }
