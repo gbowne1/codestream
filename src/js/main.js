@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearSearch = document.getElementById("clearSearch");
   const previewContainer = document.querySelector(".row");
 
+ let streamData = [];
+  
   // Fetch streams from API
   async function fetchStreams() {
     try {
