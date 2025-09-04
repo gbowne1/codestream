@@ -1,13 +1,33 @@
 {
-  "name": "codestream",
+  "name": "devstream",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A live streaming platform for developers.",
+  "main": "src/js/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "pwa",
+    "web-dev",
+    "streaming",
+    "vite",
+    "vanilla-js"
+  ],
+  "author": "gbowne1",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "module",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "bootstrap": "^5.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "vite": "^5.2.11"
+  }
 }
