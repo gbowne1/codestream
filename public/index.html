@@ -4,32 +4,49 @@
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline';
-    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+    script-src 'self' https://cdn.jsdelivr.net;
+    style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com;
     font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com data:;
     img-src 'self' data:;
     object-src 'none';
   " />
 
+  <!-- Responsive + Theme -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f4f4f4" />
+
+  <!-- SEO -->
   <meta name="description" content="Live streaming platform for developers." />
   <meta name="author" content="gbowne1" />
+  <meta name="keywords" content="live coding, game dev, streaming, developers, programming, software" />
+  <link rel="canonical" href="https://yourdomain.com" />
 
-  <!-- OpenGraph Meta -->
+  <!-- OpenGraph -->
   <meta property="og:title" content="DevStream" />
   <meta property="og:description" content="Stream your code and game dev live." />
-  <meta property="og:image" content="/src/assets/images/banner.jpg" />
+  <meta property="og:image" content="https://yourdomain.com/src/assets/images/banner.jpg" />
   <meta property="og:url" content="https://yourdomain.com" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DevStream" />
+  <meta name="twitter:description" content="Stream your code and game dev live." />
+  <meta name="twitter:image" content="https://yourdomain.com/src/assets/images/banner.jpg" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <!-- Icons + Fonts -->
-  <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" />
   <link rel="stylesheet" href="/src/css/style.css" />
 
+  <!-- Scripts -->
   <script defer src="/src/js/main.js"></script>
   <title>DevStream | Live Coding & Game Dev</title>
 </head>
