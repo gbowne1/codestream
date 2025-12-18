@@ -5,30 +5,27 @@
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' https://cdn.jsdelivr.net;
-    style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
     font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com data:;
-    img-src 'self' data:;
+    img-src 'self' data: https:;
     object-src 'none';
   " />
 
-  <!-- Responsive + Theme -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f4f4f4" />
+  <meta name="theme-color" content="#ffffff" />
 
   <!-- SEO -->
   <meta name="description" content="Live streaming platform for developers." />
   <meta name="author" content="gbowne1" />
   <meta name="keywords" content="live coding, game dev, streaming, developers, programming, software" />
-  <link rel="canonical" href="https://yourdomain.com" />
 
-  <!-- OpenGraph -->
+  <!-- OpenGraph / Twitter -->
   <meta property="og:title" content="DevStream" />
   <meta property="og:description" content="Stream your code and game dev live." />
   <meta property="og:image" content="https://yourdomain.com/src/assets/images/banner.jpg" />
   <meta property="og:url" content="https://yourdomain.com" />
   <meta property="og:type" content="website" />
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="DevStream" />
   <meta name="twitter:description" content="Stream your code and game dev live." />
@@ -36,32 +33,28 @@
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <!-- Icons + Fonts -->
   <link rel="icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="/src/css/style.css" />
 
-  <!-- Scripts -->
-  <script defer src="/src/js/main.js"></script>
   <title>DevStream | Live Coding & Game Dev</title>
 </head>
 
-<body>
-  <header class="sticky-top bg-white dark:bg-gray-900 shadow z-10">
+<body class="bg-light">
+  <header class="sticky-top bg-white shadow">
     <div class="container d-flex justify-content-between align-items-center py-3">
-      <h1 class="h3 mb-0">DevStream</h1>
-      <nav aria-label="Main Navigation">
-        <ul class="nav gap-3">
+      <h1 class="h3 mb-0"><a href="/" class="text-decoration-none text-dark">DevStream</a></h1>
+      <nav aria-label="Main navigation">
+        <ul class="nav gap-3 align-items-center">
           <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Browse</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Schedule</a></li>
           <li class="nav-item">
-            <button id="themeToggle" class="btn btn-sm btn-outline-secondary" aria-label="Toggle theme" title="Toggle dark mode">
+            <button id="themeToggle" class="btn btn-sm btn-outline-secondary" aria-label="Toggle dark mode">
               <i class="fas fa-moon"></i>
             </button>
           </li>
@@ -69,10 +62,9 @@
             <button
               id="drawerToggle"
               class="btn btn-sm btn-outline-success"
-              aria-label="Toggle category drawer"
+              aria-label="Open categories"
               aria-expanded="false"
               aria-controls="categoryDrawer"
-              title="Toggle category drawer"
             >
               <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
@@ -82,126 +74,95 @@
     </div>
   </header>
 
-  <!-- Off-canvas drawer -->
-  <aside id="categoryDrawer" class="position-fixed top-0 start-0 h-100 bg-dark text-white p-4 shadow-lg" style="width: 260px; display: none; z-index: 1050;">
-    <h2 class="h5">Categories</h2>
+  <!-- Off-canvas Category Drawer -->
+  <aside 
+    id="categoryDrawer" 
+    class="position-fixed top-0 start-0 h-100 bg-dark text-white p-4 shadow-lg overflow-auto"
+    style="width: 280px; transform: translateX(-100%); transition: transform 0.3s ease-in-out; z-index: 1050;"
+    aria-hidden="true"
+  >
+    <div class="d-flex justify-content-between align-items-start mb-4">
+      <h2 class="h5 mb-0">Categories</h2>
+      <button id="drawerClose" class="btn btn-sm btn-light" aria-label="Close categories">&times;</button>
+    </div>
     <ul class="list-unstyled">
-      <li><a href="#" class="text-white d-block py-1">Game Development</a></li>
-      <li><a href="#" class="text-white d-block py-1">Software Development</a></li>
-      <li><a href="#" class="text-white d-block py-1">Operating System Dev</a></li>
-      <li><a href="#" class="text-white d-block py-1">Web Development</a></li>
-      <li><a href="#" class="text-white d-block py-1">Mobile Development</a></li>
-      <li><a href="#" class="text-white d-block py-1">Hacking & Cybersecurity</a></li>
-      <li><a href="#" class="text-white d-block py-1">Game Art & PixelArt</a></li>
-      <li><a href="#" class="text-white d-block py-1">Leetcode & Co-Working</a></li>
-      <li><a href="#" class="text-white d-block py-1">Talks & Conventions</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Game Development</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Software Development</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Operating System Dev</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Web Development</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Mobile Development</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Hacking & Cybersecurity</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Game Art & PixelArt</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Leetcode & Co-Working</a></li>
+      <li><a href="#" class="text-white text-decoration-none d-block py-2 px-3 rounded hover-bg-secondary">Talks & Conventions</a></li>
     </ul>
-    <button id="drawerClose" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2" aria-label="Close Drawer">&times;</button>
   </aside>
 
+  <!-- Overlay for drawer (improves UX on click outside) -->
+  <div id="drawerOverlay" class="position-fixed inset-0 bg-black bg-opacity-50" style="display: none; z-index: 1040;"></div>
+
   <main class="container mt-4">
-    <section class="mb-5" aria-labelledby="trending">
-      <h1 id="trending" class="mb-3 h4">Live Streams</h2>
-      <div class="input-group mb-4">
-        <input type="search" id="searchInput" class="form-control" placeholder="Search streams or tags..." aria-label="Search" />
-        <button class="btn btn-outline-primary" type="button" id="clearSearch" aria-label="Clear search">
+    <section class="mb-5" aria-labelledby="live-streams-heading">
+      <h1 id="live-streams-heading" class="h4 mb-4">Live Streams</h1>
+
+      <!-- Search Bar -->
+      <div class="input-group mb-4 max-w-lg">
+        <input 
+          type="search" 
+          id="searchInput" 
+          class="form-control" 
+          placeholder="Search by title, streamer, or tag..." 
+          aria-label="Search live streams"
+        />
+        <button 
+          class="btn btn-outline-secondary d-none" 
+          type="button" 
+          id="clearSearch" 
+          aria-label="Clear search"
+        >
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <!-- Stream preview card -->
-        <!-- Dynamically Rendered here by main.js -->
-        <!-- More cards... (repeat above for sample/demo data) -->
+
+      <!-- Loading / Stream Grid -->
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="streamGrid">
+        <!-- Streams rendered dynamically by main.js -->
+        <div class="text-center py-5" id="loadingState">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading streams...</span>
+          </div>
+          <p class="mt-3 text-muted">Loading live streams...</p>
+        </div>
       </div>
     </section>
 
-    <!-- Tags section -->
-    <section aria-labelledby="tags">
-      <h2 id="tags" class="h5 mb-3">Tags</h2>
-      <div class="d-flex flex-wrap gap-2">
-        <!-- Programming language tags -->
-        <span class="badge bg-primary">Java</span>
-        <span class="badge bg-primary">C++</span>
-        <span class="badge bg-primary">C</span>
-        <span class="badge bg-primary">Go</span>
-        <span class="badge bg-primary">C#</span>
-        <span class="badge bg-primary">PHP</span>
-        <span class="badge bg-primary">Ruby</span>
-        <span class="badge bg-primary">Rust</span>
-        <span class="badge bg-primary">Python</span>
-        <span class="badge bg-primary">JavaScript</span>
-        <span class="badge bg-primary">TypeScript</span>
-        <span class="badge bg-primary">HTML</span>
-        <span class="badge bg-primary">CSS</span>
-        <span class="badge bg-primary">SQL</span>
-        <span class="badge bg-primary">Bash</span>
-        <span class="badge bg-primary">Shell</span>
-        <span class="badge bg-primary">Assembly</span>
-        
-        <!-- Spoken language tags -->
-        <span class="badge bg-success">Russian</span>
-        <span class="badge bg-success">Spanish</span>
-        <span class="badge bg-success">French</span>
-        <span class="badge bg-success">Korean</span>
-        <span class="badge bg-success">Japanese</span>
-        <span class="badge bg-success">Vietnamese</span>
-        <span class="badge bg-success">Portuguese</span>
-        <span class="badge bg-success">German</span>
-        <span class="badge bg-success">Norwegian</span>
-        <span class="badge bg-success">Finnish</span>
-        <span class="badge bg-success">Danish</span>
-        <span class="badge bg-success">Chinese</span>
-        <span class="badge bg-success">Swedish</span>
-        <span class="badge bg-success">English</span>
-        <span class="badge bg-success">Italian</span>
-        
-        <!-- Framework tags -->
-        <span class="badge bg-dark">React</span>
-        <span class="badge bg-dark">Django</span>
-        <span class="badge bg-dark">Vue</span>
-        <span class="badge bg-dark">Next</span>
-        <span class="badge bg-dark">Flask</span>
-        <span class="badge bg-dark">Express</span>
-        <span class="badge bg-dark">NodeJS</span>
-        <span class="badge bg-dark">Flutter</span>
-        <span class="badge bg-dark">Rails</span>
-        <span class="badge bg-dark">Nuxt</span>
-        <span class="badge bg-dark">Laravel</span>
-        <span class="badge bg-dark">Angular</span>
-        <span class="badge bg-dark">Tailwind</span>
-        <span class="badge bg-dark">Bootstrap</span>
-        <span class="badge bg-dark">Svelte</span>
-        <span class="badge bg-dark">MUI</span>
-        <span class="badge bg-dark">WordPress</span>
-        
-
-        <!-- Vibe tags -->
-        <span class="badge bg-warning text-dark">Chill</span>
-        <span class="badge bg-warning text-dark">420</span>
-        <span class="badge bg-warning text-dark">ADHD</span>
-        <span class="badge bg-warning text-dark">Autism</span>
-        <span class="badge bg-warning text-dark">LGBTQIA+</span>
-        <span class="badge bg-warning text-dark">Mental Health</span>
-        <span class="badge bg-warning text-dark">Productivity</span>
-        <span class="badge bg-warning text-dark">Co-Working</span>
-        <span class="badge bg-warning text-dark">Focused</span>
-
-        <!-- OS tags -->
-        <span class="badge bg-light text-dark border">Linux</span>
-        <span class="badge bg-light text-dark border">Windows</span>
-        <span class="badge bg-light text-dark border">Unix</span>
-        <span class="badge bg-light text-dark border">MacOS</span>
-        <span class="badge bg-light text-dark border">Android</span>
-        <span class="badge bg-light text-dark border">iOS</span>
-
+    <!-- Popular Tags (now optional – you can keep or remove) -->
+    <section aria-labelledby="popular-tags" class="mt-5">
+      <h2 id="popular-tags" class="h5 mb-3">Popular Tags</h2>
+      <div class="d-flex flex-wrap gap-2" id="popularTags">
+        <!-- These are static but now clickable for filtering -->
+        <!-- We'll enhance this in JS if desired, or remove section entirely -->
+        <span class="badge bg-primary tag-filter" role="button" tabindex="0">JavaScript</span>
+        <span class="badge bg-primary tag-filter" role="button" tabindex="0">Python</span>
+        <span class="badge bg-primary tag-filter" role="button" tabindex="0">Rust</span>
+        <span class="badge bg-primary tag-filter" role="button" tabindex="0">React</span>
+        <span class="badge bg-success tag-filter" role="button" tabindex="0">English</span>
+        <span class="badge bg-success tag-filter" role="button" tabindex="0">Spanish</span>
+        <span class="badge bg-warning text-dark tag-filter" role="button" tabindex="0">Chill</span>
+        <span class="badge bg-light text-dark border tag-filter" role="button" tabindex="0">Linux</span>
+        <!-- Add more as needed -->
       </div>
     </section>
   </main>
 
-  <footer class="text-center py-4 mt-5">
-    <p class="mb-0">&copy; 2025 DevStream. All rights reserved.</p>
+  <footer class="text-center py-5 mt-5 bg-light border-top">
+    <p class="mb-0 text-muted">&copy; 2025 DevStream. All rights reserved.</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  
+  <!-- Main App Logic -->
+  <script defer src="/src/js/main.js"></script>
 </body>
 </html>
