@@ -96,6 +96,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // After fetchStreams() and renderStreams()
+function attachPopularTagListeners() {
+  document.querySelectorAll('.tag-filter').forEach(tag => {
+    tag.onclick = tag.onkeydown = (e) => {
+      if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+      e.preventDefault();
+      const term = tag.textContent.trim().toLowerCase();
+      const filtered = allStreams.filter(stream =>
+        stream.tags.some(t => t.toLowerCase().includes(term)) ||
+        stream.title.toLowerCase().includes(term) ||
+        stream.user.toLowerCase().includes(term)
+      );
+      renderStreams(filtered);
+      searchInput.value = `#${tag.textContent.trim()}`;
+    };
+  });
+}
+
+// Call it once after first render
+// Inside fetchStreams() success: renderStreams(allStreams); attachPopularTagListeners();
+  
   // Drawer functionality (unchanged)
   const updateDrawerState = (isOpen) => {
     if (isOpen) {
