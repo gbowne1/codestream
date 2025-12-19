@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
       card.className = "col";
       card.setAttribute("role", "article");
       card.setAttribute("aria-label", `Stream: ${stream.title} by ${stream.user}`);
+      card.dataset.streamId = stream.id;
+
 
       card.innerHTML = `
         <div class="card shadow-sm">
@@ -41,8 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <h3 class="card-title h6">${stream.title}</h3>
             <p class="card-text text-muted mb-1">${stream.user}</p>
             <p class="viewer-count text-muted small mb-2">
-              <i class="fas fa-eye" aria-hidden="true"></i> ${formatViewers(stream.viewers)} viewers
+               <i class="fas fa-eye" aria-hidden="true"></i>
+               <span class="viewer-number">${formatViewers(stream.viewers)}</span> viewers
             </p>
+
             ${stream.tags.map(tag => 
               `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
             ).join('')}
@@ -57,6 +61,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // Attach tag click listeners AFTER rendering
     attachTagListeners();
   }
+  function updateViewerCount(streamId, newCount) {
+    const card = document.querySelector(
+      `[data-stream-id="${streamId}"]`
+    );
+    if (!card) return;
+
+    const viewerEl = card.querySelector(".viewer-number");
+    if (!viewerEl) return;
+
+    const formatted = formatViewers(newCount);
+
+    if (viewerEl.textContent !== formatted) {
+      viewerEl.textContent = formatted;
+
+      viewerEl.classList.add("pulse");
+      setTimeout(() => {
+        viewerEl.classList.remove("pulse");
+      }, 300);
+    }
+  }
+
 
   // Attach click/keyboard handlers to tag badges
   function attachTagListeners() {
