@@ -165,3 +165,64 @@ body.dark .badge {
 .viewer-number.pulse {
   animation: pulse 0.3s ease-in-out;
 }
+
+/* ================================
+   Stream Detail Modal (V1)
+   ================================ */
+
+.stream-detail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stream-detail-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.stream-detail-content {
+  position: relative;
+  background-color: var(--color-card-bg);
+  color: var(--color-card-text);
+  max-width: 520px;
+  width: 90%;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.stream-detail-content img {
+  width: 100%;
+  border-radius: var(--radius);
+}
+
+.stream-detail-content h2 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.stream-detail-content .badge {
+  margin-right: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.close-modal {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-card-text);
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  opacity: 0.8;
+}
