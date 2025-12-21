@@ -31,7 +31,7 @@ well as different browsers.
 
 Please review your browser's console during development.
 
-'console.log' everything necessary to ensure everything is working
+'console.log' everything necessary to ensure everything is working.
 
 Add error messages where necessary 
 
@@ -43,10 +43,12 @@ These next subheadings will get you started on making your contributions to this
 
 If you are not sure what to work on, review the issues list first. There are also TODO's listed in the included [TODO.md](./TODO.md) file.
 
+Please '//TODO' mark incomplete areas and add them to the TODO.md file. 
+
 @gbowne1 and other project maintainers will assign users to issues on a first come, first serve basis. If you would like to work on an issue, feel free to indicate by tagging the mentioned persons.
 
 > Note: If assigned an issue and along the line you change your mind or can't figure it out, ensure to notify the team immediately so it can be unassigned then reassigned to another.
-> it is important to note that some tasks tagged good first issue may not be as simplified and basic to you as it might sound, so it is advisable to look through the issue thoroughly before volunteering.
+> it is important to note that some tasks tagged good first issue may not be as simplified and basic to you as it might sound, so it is advisable to look through the issue thoroughly before volunteering. In most cases, 'good first issue' and 'help wanted' were selected to ensure issue visibility on GitHub.
 
 ## Create an issue
 
@@ -112,6 +114,8 @@ Please provide a short video, copy of log(s), passing tests,
 screenshots of working changes. This helps with reviewers knowing 
 what to expect with your changes and contributions.
 
+If you manage to contribute a minimum of 3 accepted and merged PRs, you can request to be a contributor/maintainer/collsborator.
+
 ## Style
 
 An official style guide is yet to be released. There is also no existing figma or layout.
@@ -135,7 +139,7 @@ working with our code base.
 
 This project was bootstrapped with these libraries, modules, packages 
 
-All core components are built with JSX.
+All core components, modules, etc. are built with JavaScript.
 
 ## Branches
 
