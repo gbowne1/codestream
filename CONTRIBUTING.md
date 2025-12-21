@@ -1,4 +1,4 @@
-# Contributing to CodeBooker development
+# Contributing to codestream/DevStream development
 
 This project welcomes contributors to help improve its codebase by identifying shortcomings
 in the project, highlighting bugs, and issues in the documentation.
