@@ -54,7 +54,7 @@ Please '//TODO' mark incomplete areas and add them to the TODO.md file.
 
 Have you noticed a feature that did not look or work right in our applicaton, or a typographical error, wrong syntax, grammar, spelling or other issue?
 
-Check to see if an issue has been created for this in https://github.com/gbowne1/codebooker/issues
+Check to see if an issue has been created for this in https://github.com/gbowne1/codestream/issues
 
 If none has been created, Click on the green [New Issue] button.
 
