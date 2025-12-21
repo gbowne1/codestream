@@ -7,110 +7,112 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearSearch = document.getElementById("clearSearch");
   const previewContainer = document.getElementById("streamGrid");
 
+  let allStreams = [];
 
-  let allStreams = []; // Renamed for clarity: holds full list from API
-
-  // Format viewer count
   function formatViewers(count) {
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + 'K';
+      return (count / 1000).toFixed(1) + "K";
     }
     return count.toLocaleString();
   }
 
-  // Render streams
   function renderStreams(streams) {
-  previewContainer.innerHTML = "";
-  if (!streams || streams.length === 0) {
-    previewContainer.innerHTML = '<p class="text-muted">No streams found.</p>';
-    return;
+    previewContainer.innerHTML = "";
+    if (!streams || streams.length === 0) {
+      previewContainer.innerHTML =
+        '<p class="text-muted">No streams found.</p>';
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    streams.forEach((stream) => {
+      const card = document.createElement("article");
+      card.className = "col";
+      card.dataset.streamId = stream.id;
+
+      card.innerHTML = `
+        <div class="card shadow-sm">
+          <img src="${stream.img}" class="card-img-top" loading="lazy"
+               alt="Stream preview for ${stream.title}" />
+          <div class="card-body">
+            <h3 class="card-title h6">${stream.title}</h3>
+            <p class="card-text text-muted mb-1">${stream.user}</p>
+            <p class="viewer-count text-muted small mb-2">
+              <span class="viewer-number">${formatViewers(
+                stream.viewers
+              )}</span> viewers
+            </p>
+            ${stream.tags
+              .map(
+                (tag) =>
+                  `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
+              )
+              .join("")}
+          </div>
+        </div>
+      `;
+
+      card.addEventListener("click", () => openStreamDetail(stream));
+      fragment.appendChild(card);
+    });
+
+    previewContainer.appendChild(fragment);
+    attachTagListeners();
   }
 
-  const fragment = document.createDocumentFragment();
+  function openStreamDetail(stream) {
+    const existingModal = document.querySelector(".stream-detail-modal");
+    if (existingModal) existingModal.remove();
 
-  streams.forEach((stream) => {
-    const card = document.createElement("article");
-    card.className = "col";
-    card.dataset.streamId = stream.id;
+    const modal = document.createElement("div");
+    modal.className = "stream-detail-modal";
 
-    card.innerHTML = `
-      <div class="card shadow-sm">
-        <img src="${stream.img}" class="card-img-top" loading="lazy"
-             alt="Stream preview for ${stream.title}" />
-        <div class="card-body">
-          <h3 class="card-title h6">${stream.title}</h3>
-          <p class="card-text text-muted mb-1">${stream.user}</p>
-          <p class="viewer-count text-muted small mb-2">
-            <span class="viewer-number">${formatViewers(stream.viewers)}</span> viewers
-          </p>
-          ${stream.tags.map(tag =>
-            `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
-          ).join("")}
+    modal.innerHTML = `
+      <div class="stream-detail-overlay"></div>
+      <div class="stream-detail-content">
+        <button class="close-modal" aria-label="Close stream detail">&times;</button>
+
+        <img src="${stream.img}" alt="${stream.title}" class="img-fluid mb-3"/>
+
+        <h2 class="h5">${stream.title}</h2>
+        <p class="text-muted mb-1">${stream.user}</p>
+
+        <p class="small text-muted">
+          ${formatViewers(stream.viewers)} viewers
+        </p>
+
+        <div class="mt-2">
+          ${stream.tags
+            .map(
+              (tag) => `<span class="badge bg-primary me-1">${tag}</span>`
+            )
+            .join("")}
         </div>
       </div>
     `;
 
-    // ✅ REQUIRED BY ISSUE
-    card.addEventListener("click", () => openStreamDetail(stream));
+    document.body.appendChild(modal);
 
-    fragment.appendChild(card);
-  });
+    const escHandler = (e) => {
+      if (e.key === "Escape") {
+        close();
+      }
+    };
 
-  previewContainer.appendChild(fragment);
-  attachTagListeners();
-}
-
-
-  function openStreamDetail(stream) {
-  // Remove existing modal if present
-  const existingModal = document.querySelector(".stream-detail-modal");
-  if (existingModal) existingModal.remove();
-
-  const modal = document.createElement("div");
-  modal.className = "stream-detail-modal";
-
-  modal.innerHTML = `
-    <div class="stream-detail-overlay"></div>
-    <div class="stream-detail-content">
-      <button class="close-modal" aria-label="Close stream detail">&times;</button>
-
-      <img src="${stream.img}" alt="${stream.title}" class="img-fluid mb-3"/>
-
-      <h2 class="h5">${stream.title}</h2>
-      <p class="text-muted mb-1">${stream.user}</p>
-
-      <p class="small text-muted">
-        ${formatViewers(stream.viewers)} viewers
-      </p>
-
-      <div class="mt-2">
-        ${stream.tags.map(tag =>
-          `<span class="badge bg-primary me-1">${tag}</span>`
-        ).join("")}
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  const close = () => modal.remove();
-
-  modal.querySelector(".close-modal").onclick = close;
-  modal.querySelector(".stream-detail-overlay").onclick = close;
-
-  // Optional but good UX
-  document.addEventListener("keydown", function escHandler(e) {
-    if (e.key === "Escape") {
-      close();
+    const close = () => {
       document.removeEventListener("keydown", escHandler);
-    }
-  });
-}
+      modal.remove();
+    };
+
+    modal.querySelector(".close-modal").onclick = close;
+    modal.querySelector(".stream-detail-overlay").onclick = close;
+
+    document.addEventListener("keydown", escHandler);
+  }
 
   function updateViewerCount(streamId, newCount) {
-    const card = document.querySelector(
-      `[data-stream-id="${streamId}"]`
-    );
+    const card = document.querySelector(`[data-stream-id="${streamId}"]`);
     if (!card) return;
 
     const viewerEl = card.querySelector(".viewer-number");
@@ -120,95 +122,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (viewerEl.textContent !== formatted) {
       viewerEl.textContent = formatted;
-
       viewerEl.classList.add("pulse");
-      setTimeout(() => {
-        viewerEl.classList.remove("pulse");
-      }, 300);
+      setTimeout(() => viewerEl.classList.remove("pulse"), 300);
     }
   }
 
-
-  // Attach click/keyboard handlers to tag badges
   function attachTagListeners() {
-  document.querySelectorAll(".tag-badge").forEach(badge => {
-    const clickHandler = (e) => {
-      e.stopPropagation(); // IMPORTANT
-      const tag = badge.textContent.trim().toLowerCase();
-      const filtered = allStreams.filter(stream =>
-        stream.tags.some(t => t.toLowerCase() === tag)
-      );
-      renderStreams(filtered);
-      searchInput.value = `#${badge.textContent.trim()}`;
-    };
+    document.querySelectorAll(".tag-badge").forEach((badge) => {
+      const clickHandler = (e) => {
+        e.stopPropagation();
+        const tag = badge.textContent.trim().toLowerCase();
+        const filtered = allStreams.filter((stream) =>
+          stream.tags.some((t) => t.toLowerCase() === tag)
+        );
+        renderStreams(filtered);
+        searchInput.value = `#${badge.textContent.trim()}`;
+      };
 
-    badge.onclick = clickHandler;
-    badge.onkeydown = (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        clickHandler(e);
-      }
-    };
-  });
-}
+      badge.onclick = clickHandler;
+      badge.onkeydown = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          clickHandler(e);
+        }
+      };
+    });
+  }
 
-
-  // Fetch streams from API
   async function fetchStreams() {
     try {
-      const response = await fetch('/api/streams');
+      const response = await fetch("/api/streams");
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      
       const data = await response.json();
-      allStreams = data; // Update the master list
+      allStreams = data;
       renderStreams(allStreams);
     } catch (error) {
-      console.error('Failed to fetch streams:', error);
-      previewContainer.innerHTML = '<p class="text-danger">Error loading streams. Please try again later.</p>';
+      console.error("Failed to fetch streams:", error);
+      previewContainer.innerHTML =
+        '<p class="text-danger">Error loading streams.</p>';
     }
   }
 
-  // After fetchStreams() and renderStreams()
-function attachPopularTagListeners() {
-  document.querySelectorAll('.tag-filter').forEach(tag => {
-    tag.onclick = tag.onkeydown = (e) => {
-      if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
-      e.preventDefault();
-      const term = tag.textContent.trim().toLowerCase();
-      const filtered = allStreams.filter(stream =>
-        stream.tags.some(t => t.toLowerCase().includes(term)) ||
-        stream.title.toLowerCase().includes(term) ||
-        stream.user.toLowerCase().includes(term)
-      );
-      renderStreams(filtered);
-      searchInput.value = `#${tag.textContent.trim()}`;
-    };
-  });
-}
-
-// Call it once after first render
-// Inside fetchStreams() success: renderStreams(allStreams); attachPopularTagListeners();
-  
-  // Drawer functionality (unchanged)
   const updateDrawerState = (isOpen) => {
     if (isOpen) {
       drawer.classList.add("open");
-      drawerToggle.setAttribute('aria-expanded', 'true');
+      drawerToggle.setAttribute("aria-expanded", "true");
     } else {
       drawer.classList.remove("open");
-      drawerToggle.setAttribute('aria-expanded', 'false');
+      drawerToggle.setAttribute("aria-expanded", "false");
     }
   };
 
   drawerToggle.addEventListener("click", () => {
-    const isOpen = drawer.classList.contains("open");
-    updateDrawerState(!isOpen);
+    updateDrawerState(!drawer.classList.contains("open"));
   });
 
   document.addEventListener("click", (e) => {
-    if (drawer.classList.contains("open") && 
-        !drawer.contains(e.target) && 
-        !drawerToggle.contains(e.target)) {
+    if (
+      drawer.classList.contains("open") &&
+      !drawer.contains(e.target) &&
+      !drawerToggle.contains(e.target)
+    ) {
       updateDrawerState(false);
     }
   });
@@ -221,8 +195,7 @@ function attachPopularTagListeners() {
     }
   });
 
-  // Theme toggle (unchanged)
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
   const LIGHT_THEME_COLOR = "#ffffff";
   const DARK_THEME_COLOR = "#111111";
 
@@ -232,21 +205,22 @@ function attachPopularTagListeners() {
     icon.classList.toggle("fa-moon", !isDark);
     icon.classList.toggle("fa-sun", isDark);
 
-    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const themeColorMeta = document.querySelector(
+      'meta[name="theme-color"]'
+    );
     if (themeColorMeta) {
-      themeColorMeta.setAttribute('content', isDark ? DARK_THEME_COLOR : LIGHT_THEME_COLOR);
+      themeColorMeta.setAttribute(
+        "content",
+        isDark ? DARK_THEME_COLOR : LIGHT_THEME_COLOR
+      );
     }
   };
 
-  const storedTheme = localStorage.getItem("theme");
-  let isDark = storedTheme === "dark" || (storedTheme === null && prefersDark.matches);
-  applyTheme(isDark);
+  let isDark =
+    localStorage.getItem("theme") === "dark" ||
+    (localStorage.getItem("theme") === null && prefersDark.matches);
 
-  prefersDark.addEventListener('change', (e) => {
-    if (localStorage.getItem("theme") === null) {
-      applyTheme(e.matches);
-    }
-  });
+  applyTheme(isDark);
 
   themeToggle.addEventListener("click", () => {
     isDark = !isDark;
@@ -254,7 +228,6 @@ function attachPopularTagListeners() {
     applyTheme(isDark);
   });
 
-  // Search with debounce
   function debounce(func, delay) {
     let timeout;
     return (...args) => {
@@ -263,20 +236,22 @@ function attachPopularTagListeners() {
     };
   }
 
-  searchInput.addEventListener("input", debounce(() => {
-    const term = searchInput.value.trim().toLowerCase();
-    if (term === "") {
-      renderStreams(allStreams);
-      return;
-    }
+  searchInput.addEventListener(
+    "input",
+    debounce(() => {
+      const term = searchInput.value.trim().toLowerCase();
+      if (!term) return renderStreams(allStreams);
 
-    const filtered = allStreams.filter(stream =>
-      stream.title.toLowerCase().includes(term) ||
-      stream.user.toLowerCase().includes(term) ||
-      stream.tags.some(tag => tag.toLowerCase().includes(term))
-    );
-    renderStreams(filtered);
-  }, 300));
+      renderStreams(
+        allStreams.filter(
+          (s) =>
+            s.title.toLowerCase().includes(term) ||
+            s.user.toLowerCase().includes(term) ||
+            s.tags.some((t) => t.toLowerCase().includes(term))
+        )
+      );
+    }, 300)
+  );
 
   clearSearch.addEventListener("click", () => {
     searchInput.value = "";
@@ -284,17 +259,16 @@ function attachPopularTagListeners() {
     renderStreams(allStreams);
   });
 
-  // === INITIALIZATION ===
-  fetchStreams(); // Actually fetch the data!
-
-  // Remove the old: renderStreams(streamData); // This was rendering empty data
+  fetchStreams();
 });
 
-// Service worker registration
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js")
-      .then(reg => console.log("Service Worker registered:", reg))
-      .catch(err => console.error("Service Worker registration failed:", err));
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .then((reg) => console.log("Service Worker registered:", reg))
+      .catch((err) =>
+        console.error("Service Worker registration failed:", err)
+      );
   });
 }
