@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    // ✅ REQUIRED BY ISSUE
+
     card.addEventListener("click", () => openStreamDetail(stream));
 
     fragment.appendChild(card);
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function openStreamDetail(stream) {
-  // Remove existing modal if present
+  // Remove existing modal if any
   const existingModal = document.querySelector(".stream-detail-modal");
   if (existingModal) existingModal.remove();
 
@@ -93,18 +93,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.appendChild(modal);
 
-  const close = () => modal.remove();
+  
+  history.pushState({ streamId: stream.id }, "", `#stream-${stream.id}`);
 
-  modal.querySelector(".close-modal").onclick = close;
-  modal.querySelector(".stream-detail-overlay").onclick = close;
+  const closeModal = () => {
+    modal.remove();
+  };
 
-  // Optional but good UX
-  document.addEventListener("keydown", function escHandler(e) {
-    if (e.key === "Escape") {
-      close();
-      document.removeEventListener("keydown", escHandler);
-    }
-  });
+  modal.querySelector(".close-modal").onclick = closeModal;
+  modal.querySelector(".stream-detail-overlay").onclick = closeModal;
+
+  
+  window.addEventListener("popstate", closeModal, { once: true });
 }
 
   function updateViewerCount(streamId, newCount) {
@@ -155,18 +155,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fetch streams from API
   async function fetchStreams() {
-    try {
-      const response = await fetch('/api/streams');
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      
-      const data = await response.json();
-      allStreams = data; // Update the master list
-      renderStreams(allStreams);
-    } catch (error) {
-      console.error('Failed to fetch streams:', error);
-      previewContainer.innerHTML = '<p class="text-danger">Error loading streams. Please try again later.</p>';
-    }
+  try {
+    const response = await fetch('/api/streams.json');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+    allStreams = data;
+
+    const loading = document.getElementById("loadingState");
+    if (loading) loading.remove();
+
+    renderStreams(allStreams);
+    attachPopularTagListeners();
+  } catch (error) {
+    console.error('Failed to fetch streams:', error);
+    previewContainer.innerHTML =
+      '<p class="text-danger">Error loading streams.</p>';
   }
+}
+
 
   // After fetchStreams() and renderStreams()
 function attachPopularTagListeners() {
