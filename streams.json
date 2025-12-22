@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "user": "KernelPanic",
+    "title": "Building a custom OS kernel from scratch",
+    "category": "Operating System Developer",
+    "viewers": 1240,
+    "thumbnail": "https://placehold.co/600x400/000/fff?text=OS+Dev"
+  },
+  {
+    "id": "2",
+    "user": "SyntaxSorceress",
+    "title": "React Server Components vs. The World",
+    "category": "Web Development",
+    "viewers": 850,
+    "thumbnail": "https://placehold.co/600x400/000/fff?text=Web+Dev"
+  },
+  {
+    "id": "3",
+    "user": "CyberGhost",
+    "title": "Live Bug Bounty Hunting - Target: Unknown",
+    "category": "Hacking & Cybersecurity",
+    "viewers": 2100,
+    "thumbnail": "https://placehold.co/600x400/000/fff?text=Hacking"
+  },
+  {
+    "id": "4",
+    "user": "PixelPush",
+    "title": "Designing Character Sprites for my Indie RPG",
+    "category": "Game Art & Pixel Art",
+    "viewers": 320,
+    "thumbnail": "https://placehold.co/600x400/000/fff?text=Game+Art"
+  },
+  {
+    "id": "5",
+    "user": "LeetCoder99",
+    "title": "Daily Leetcode Grind - Hard Problems Only",
+    "category": "Leetcoder & Co-Working",
+    "viewers": 450,
+    "thumbnail": "https://placehold.co/600x400/000/fff?text=Leetcode"
+  }
+]
