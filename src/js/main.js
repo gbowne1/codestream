@@ -129,7 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.innerHTML = `
       <div class="stream-detail-overlay"></div>
       <div class="stream-detail-content">
-        <button class="close-modal" aria-label="Close stream detail">&times;</button>
+        <button class="close-modal" aria-label="Close stream detail">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
         <img src="${stream.img}" alt="${stream.title}" class="img-fluid mb-3"/>
         <h2 class="h5">${stream.title}</h2>
         <p class="text-muted mb-1">${stream.user}</p>
@@ -146,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.appendChild(modal);
 
+  
     const close = () => {
       document.removeEventListener("keydown", escHandler);
       modal.remove();
