@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const clearSearch = document.getElementById("clearSearch");
   const previewContainer = document.getElementById("streamGrid");
+  const popularTagsContainer = document.getElementById("popularTags");
 
   let allStreams = [];
 
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.dataset.streamId = stream.id;
 
       card.innerHTML = `
-        <div class="card shadow-sm">
+        <div class="card shadow-sm h-100">
           <img src="${stream.img}" class="card-img-top" loading="lazy"
                alt="Stream preview for ${stream.title}" />
           <div class="card-body">
@@ -53,12 +54,69 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
 
-      card.addEventListener("click", () => openStreamDetail(stream));
       fragment.appendChild(card);
     });
 
     previewContainer.appendChild(fragment);
-    attachTagListeners();
+  }
+
+  /**
+   * Helper function to handle the filtering logic
+   */
+  const handleTagFilter = (tagName) => {
+    const tag = tagName.trim().toLowerCase();
+    const filtered = allStreams.filter((stream) =>
+      stream.tags.some((t) => t.toLowerCase() === tag)
+    );
+    renderStreams(filtered);
+    searchInput.value = `#${tagName.trim()}`;
+    if (clearSearch) clearSearch.classList.remove("d-none");
+  };
+
+  /**
+   * EVENT DELEGATION: Single handler for the entire grid
+   */
+  const handleGridInteraction = (e) => {
+    const target = e.target;
+
+    // 1. Check if a Tag Badge was clicked
+    const badge = target.closest(".tag-badge");
+    if (badge) {
+      handleTagFilter(badge.textContent);
+      return; 
+    }
+
+    // 2. Check if the Stream Card itself was clicked
+    const card = target.closest("article.col");
+    if (card && card.dataset.streamId) {
+      const stream = allStreams.find((s) => s.id == card.dataset.streamId);
+      if (stream) openStreamDetail(stream);
+    }
+  };
+
+  // Attach dynamic grid listeners ONCE
+  previewContainer.addEventListener("click", handleGridInteraction);
+  
+  // Handle accessibility (Enter/Space) via delegation
+  previewContainer.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      if (e.target.classList.contains("tag-badge")) {
+        e.preventDefault();
+        handleTagFilter(e.target.textContent);
+      } else {
+        handleGridInteraction(e);
+      }
+    }
+  });
+
+  // Delegate listeners for the "Popular Tags" section
+  if (popularTagsContainer) {
+    popularTagsContainer.addEventListener("click", (e) => {
+      const filterBadge = e.target.closest(".tag-filter");
+      if (filterBadge) {
+        handleTagFilter(filterBadge.textContent);
+      }
+    });
   }
 
   function openStreamDetail(stream) {
@@ -72,21 +130,15 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="stream-detail-overlay"></div>
       <div class="stream-detail-content">
         <button class="close-modal" aria-label="Close stream detail">&times;</button>
-
         <img src="${stream.img}" alt="${stream.title}" class="img-fluid mb-3"/>
-
         <h2 class="h5">${stream.title}</h2>
         <p class="text-muted mb-1">${stream.user}</p>
-
         <p class="small text-muted">
           ${formatViewers(stream.viewers)} viewers
         </p>
-
         <div class="mt-2">
           ${stream.tags
-            .map(
-              (tag) => `<span class="badge bg-primary me-1">${tag}</span>`
-            )
+            .map((tag) => `<span class="badge bg-primary me-1">${tag}</span>`)
             .join("")}
         </div>
       </div>
@@ -94,59 +146,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.appendChild(modal);
 
-    const escHandler = (e) => {
-      if (e.key === "Escape") {
-        close();
-      }
-    };
-
     const close = () => {
       document.removeEventListener("keydown", escHandler);
       modal.remove();
     };
 
+    const escHandler = (e) => {
+      if (e.key === "Escape") close();
+    };
+
     modal.querySelector(".close-modal").onclick = close;
     modal.querySelector(".stream-detail-overlay").onclick = close;
-
     document.addEventListener("keydown", escHandler);
-  }
-
-  function updateViewerCount(streamId, newCount) {
-    const card = document.querySelector(`[data-stream-id="${streamId}"]`);
-    if (!card) return;
-
-    const viewerEl = card.querySelector(".viewer-number");
-    if (!viewerEl) return;
-
-    const formatted = formatViewers(newCount);
-
-    if (viewerEl.textContent !== formatted) {
-      viewerEl.textContent = formatted;
-      viewerEl.classList.add("pulse");
-      setTimeout(() => viewerEl.classList.remove("pulse"), 300);
-    }
-  }
-
-  function attachTagListeners() {
-    document.querySelectorAll(".tag-badge").forEach((badge) => {
-      const clickHandler = (e) => {
-        e.stopPropagation();
-        const tag = badge.textContent.trim().toLowerCase();
-        const filtered = allStreams.filter((stream) =>
-          stream.tags.some((t) => t.toLowerCase() === tag)
-        );
-        renderStreams(filtered);
-        searchInput.value = `#${badge.textContent.trim()}`;
-      };
-
-      badge.onclick = clickHandler;
-      badge.onkeydown = (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          clickHandler(e);
-        }
-      };
-    });
   }
 
   async function fetchStreams() {
@@ -162,6 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
         '<p class="text-danger">Error loading streams.</p>';
     }
   }
+
+  // --- UI CONTROLS ---
 
   const updateDrawerState = (isOpen) => {
     if (isOpen) {
@@ -189,37 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   drawerClose.addEventListener("click", () => updateDrawerState(false));
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && drawer.classList.contains("open")) {
-      updateDrawerState(false);
-    }
-  });
-
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-  const LIGHT_THEME_COLOR = "#ffffff";
-  const DARK_THEME_COLOR = "#111111";
-
   const applyTheme = (isDark) => {
     document.body.classList.toggle("dark", isDark);
     const icon = themeToggle.querySelector("i");
     icon.classList.toggle("fa-moon", !isDark);
     icon.classList.toggle("fa-sun", isDark);
-
-    const themeColorMeta = document.querySelector(
-      'meta[name="theme-color"]'
-    );
-    if (themeColorMeta) {
-      themeColorMeta.setAttribute(
-        "content",
-        isDark ? DARK_THEME_COLOR : LIGHT_THEME_COLOR
-      );
-    }
   };
 
-  let isDark =
-    localStorage.getItem("theme") === "dark" ||
-    (localStorage.getItem("theme") === null && prefersDark.matches);
-
+  let isDark = localStorage.getItem("theme") === "dark";
   applyTheme(isDark);
 
   themeToggle.addEventListener("click", () => {
@@ -240,6 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "input",
     debounce(() => {
       const term = searchInput.value.trim().toLowerCase();
+      clearSearch.classList.toggle("d-none", !term);
       if (!term) return renderStreams(allStreams);
 
       renderStreams(
@@ -255,13 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   clearSearch.addEventListener("click", () => {
     searchInput.value = "";
-    searchInput.focus();
+    clearSearch.classList.add("d-none");
     renderStreams(allStreams);
   });
 
   fetchStreams();
 });
 
+// RESTORED: Service Worker registration
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
