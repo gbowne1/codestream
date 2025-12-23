@@ -169,12 +169,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/api/streams");
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      allStreams = data;
+
+      // Fix for Issue #25: Map JSON keys to match the UI expectations
+      allStreams = data.map(stream => ({
+        ...stream,
+        img: stream.thumbnail,      // Map 'thumbnail' to 'img'
+        tags: [stream.category]     // Map 'category' string to a 'tags' array
+      }));
+
       renderStreams(allStreams);
     } catch (error) {
       console.error("Failed to fetch streams:", error);
       previewContainer.innerHTML =
-        '<p class="text-danger">Error loading streams.</p>';
+        '<p class="text-danger">Error loading streams. Make sure the API server is running (npm run api).</p>';
     }
   }
 
