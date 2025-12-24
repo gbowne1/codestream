@@ -1,18 +1,54 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import * as AuthControllers from './src/controllers/AuthControllers.js'; 
+import { auth, authorizeRole } from './src/middleware/auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Recreate __dirname since it is not available in ES Modules by default
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Enable CORS so your frontend can communicate with this API
-app.use(cors());
+// Middleware setup (must be before routes)
+app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS 
+app.use(express.json());
+
+// DATABASE CONNECTION
+mongoose.connect(MONGODB_URI)
+    .then(() => console.log('🟢 MongoDB connected successfully.'))
+    .catch(err => console.error('🔴 MongoDB connection error:', err));
+
+
+//  AUTH ROUTES 
+app.post('/api/auth/register', AuthControllers.register); 
+app.post('/api/auth/login', AuthControllers.login);       
+
+
+/**
+ * @route GET /api/auth/me
+ * @desc Gets the currently logged-in user's details (eg: username, role).
+ * This endpoint demonstrates basic 'auth' middleware protection.
+ */
+app.get('/api/auth/me', auth, AuthControllers.getUserDetails); 
+
+
+/**
+ * @route GET /api/admin/dashboard
+ * @desc Example of a route restricted to 'admin' roles only.
+ * This demonstrates Role-Based Access Control.
+ */
+app.get('/api/admin/dashboard', auth, authorizeRole(['admin']), (req, res) => {
+    // req.user is available here due to the 'auth' middleware
+    res.json({ message: `Access granted, Admin ID: ${req.user.id}.` });
+});
 
 /**
  * Root Route
