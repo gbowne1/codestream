@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "title": "Live JavaScript Coding",
+    "user": "devAlice",
+    "viewers": 1234,
+    "img": "/src/assets/images/preview-placeholder.jpg",
+    "tags": ["JavaScript", "Web"]
+  },
+  {
+    "id": "2",
+    "title": "Rust Systems Programming",
+    "user": "rustacean",
+    "viewers": 856,
+    "img": "/src/assets/images/preview-placeholder.jpg",
+    "tags": ["Rust", "Systems"]
+  }
+]

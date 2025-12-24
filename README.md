@@ -22,3 +22,5 @@ possibly others...
 This will be fully open source.
 
 This is NOT a clone site
+
+Please review CONTRIBUTING.md for help with contributing to this project
