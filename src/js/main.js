@@ -1,24 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const drawerToggle = document.getElementById("drawerToggle");
-  const drawer = document.getElementById("categoryDrawer");
-  const drawerClose = document.getElementById("drawerClose");
-  const themeToggle = document.getElementById("themeToggle");
-  const searchInput = document.getElementById("searchInput");
-  const clearSearch = document.getElementById("clearSearch");
-  const previewContainer = document.getElementById("streamGrid");
-  const popularTagsContainer = document.getElementById("popularTags");
+document.addEventListener('DOMContentLoaded', () => {
+  const drawerToggle = document.getElementById('drawerToggle');
+  const drawer = document.getElementById('categoryDrawer');
+  const drawerClose = document.getElementById('drawerClose');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const themeToggle = document.getElementById('themeToggle');
+  const searchInput = document.getElementById('searchInput');
+  const clearSearch = document.getElementById('clearSearch');
+  const previewContainer = document.getElementById('streamGrid');
+  const popularTagsContainer = document.getElementById('popularTags');
 
   let allStreams = [];
 
   function formatViewers(count) {
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K";
+      return (count / 1000).toFixed(1) + 'K';
     }
     return count.toLocaleString();
   }
 
   function renderStreams(streams) {
-    previewContainer.innerHTML = "";
+    previewContainer.innerHTML = '';
     if (!streams || streams.length === 0) {
       previewContainer.innerHTML =
         '<p class="text-muted">No streams found.</p>';
@@ -28,8 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fragment = document.createDocumentFragment();
 
     streams.forEach((stream) => {
-      const card = document.createElement("article");
-      card.className = "col";
+      const card = document.createElement('article');
+      card.className = 'col';
       card.dataset.streamId = stream.id;
 
       card.innerHTML = `
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 (tag) =>
                   `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
               )
-              .join("")}
+              .join('')}
           </div>
         </div>
       `;
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     renderStreams(filtered);
     searchInput.value = `#${tagName.trim()}`;
-    if (clearSearch) clearSearch.classList.remove("d-none");
+    if (clearSearch) clearSearch.classList.remove('d-none');
   };
 
   /**
@@ -80,14 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = e.target;
 
     // 1. Check if a Tag Badge was clicked
-    const badge = target.closest(".tag-badge");
+    const badge = target.closest('.tag-badge');
     if (badge) {
       handleTagFilter(badge.textContent);
-      return; 
+      return;
     }
 
     // 2. Check if the Stream Card itself was clicked
-    const card = target.closest("article.col");
+    const card = target.closest('article.col');
     if (card && card.dataset.streamId) {
       const stream = allStreams.find((s) => s.id == card.dataset.streamId);
       if (stream) openStreamDetail(stream);
@@ -95,12 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Attach dynamic grid listeners ONCE
-  previewContainer.addEventListener("click", handleGridInteraction);
-  
+  previewContainer.addEventListener('click', handleGridInteraction);
+
   // Handle accessibility (Enter/Space) via delegation
-  previewContainer.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      if (e.target.classList.contains("tag-badge")) {
+  previewContainer.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      if (e.target.classList.contains('tag-badge')) {
         e.preventDefault();
         handleTagFilter(e.target.textContent);
       } else {
@@ -111,8 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Delegate listeners for the "Popular Tags" section
   if (popularTagsContainer) {
-    popularTagsContainer.addEventListener("click", (e) => {
-      const filterBadge = e.target.closest(".tag-filter");
+    popularTagsContainer.addEventListener('click', (e) => {
+      const filterBadge = e.target.closest('.tag-filter');
       if (filterBadge) {
         handleTagFilter(filterBadge.textContent);
       }
@@ -120,11 +121,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openStreamDetail(stream) {
-    const existingModal = document.querySelector(".stream-detail-modal");
+    const existingModal = document.querySelector('.stream-detail-modal');
     if (existingModal) existingModal.remove();
 
-    const modal = document.createElement("div");
-    modal.className = "stream-detail-modal";
+    const modal = document.createElement('div');
+    modal.className = 'stream-detail-modal';
 
     modal.innerHTML = `
       <div class="stream-detail-overlay"></div>
@@ -142,44 +143,43 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="mt-2">
           ${stream.tags
             .map((tag) => `<span class="badge bg-primary me-1">${tag}</span>`)
-            .join("")}
+            .join('')}
         </div>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-  
     const close = () => {
-      document.removeEventListener("keydown", escHandler);
+      document.removeEventListener('keydown', escHandler);
       modal.remove();
     };
 
     const escHandler = (e) => {
-      if (e.key === "Escape") close();
+      if (e.key === 'Escape') close();
     };
 
-    modal.querySelector(".close-modal").onclick = close;
-    modal.querySelector(".stream-detail-overlay").onclick = close;
-    document.addEventListener("keydown", escHandler);
+    modal.querySelector('.close-modal').onclick = close;
+    modal.querySelector('.stream-detail-overlay').onclick = close;
+    document.addEventListener('keydown', escHandler);
   }
 
   async function fetchStreams() {
     try {
-      const response = await fetch("/api/streams");
+      const response = await fetch('/api/streams');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
 
       // Fix for Issue #25: Map JSON keys to match the UI expectations
-      allStreams = data.map(stream => ({
+      allStreams = data.map((stream) => ({
         ...stream,
-        img: stream.thumbnail,      // Map 'thumbnail' to 'img'
-        tags: [stream.category]     // Map 'category' string to a 'tags' array
+        img: stream.thumbnail, // Map 'thumbnail' to 'img'
+        tags: [stream.category], // Map 'category' string to a 'tags' array
       }));
 
       renderStreams(allStreams);
     } catch (error) {
-      console.error("Failed to fetch streams:", error);
+      console.error('Failed to fetch streams:', error);
       previewContainer.innerHTML =
         '<p class="text-danger">Error loading streams. Make sure the API server is running (npm run api).</p>';
     }
@@ -189,21 +189,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateDrawerState = (isOpen) => {
     if (isOpen) {
-      drawer.classList.add("open");
-      drawerToggle.setAttribute("aria-expanded", "true");
+      drawer.classList.add('open');
+      drawerOverlay.classList.remove('d-none');
+      drawerToggle.setAttribute('aria-expanded', 'true');
     } else {
-      drawer.classList.remove("open");
-      drawerToggle.setAttribute("aria-expanded", "false");
+      drawer.classList.remove('open');
+      drawerOverlay.classList.add('d-none');
+      drawerToggle.setAttribute('aria-expanded', 'false');
     }
   };
 
-  drawerToggle.addEventListener("click", () => {
-    updateDrawerState(!drawer.classList.contains("open"));
+  drawerToggle.addEventListener('click', () => {
+    updateDrawerState(!drawer.classList.contains('open'));
   });
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener('click', (e) => {
     if (
-      drawer.classList.contains("open") &&
+      drawer.classList.contains('open') &&
       !drawer.contains(e.target) &&
       !drawerToggle.contains(e.target)
     ) {
@@ -211,21 +213,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  drawerClose.addEventListener("click", () => updateDrawerState(false));
+  drawerClose.addEventListener('click', () => updateDrawerState(false));
+  // Drawer overlay click → close drawer
+  drawerOverlay.addEventListener('click', () => {
+    updateDrawerState(false);
+  });
 
   const applyTheme = (isDark) => {
-    document.body.classList.toggle("dark", isDark);
-    const icon = themeToggle.querySelector("i");
-    icon.classList.toggle("fa-moon", !isDark);
-    icon.classList.toggle("fa-sun", isDark);
+    document.body.classList.toggle('dark', isDark);
+    const icon = themeToggle.querySelector('i');
+    icon.classList.toggle('fa-moon', !isDark);
+    icon.classList.toggle('fa-sun', isDark);
   };
 
-  let isDark = localStorage.getItem("theme") === "dark";
+  let isDark = localStorage.getItem('theme') === 'dark';
   applyTheme(isDark);
 
-  themeToggle.addEventListener("click", () => {
+  themeToggle.addEventListener('click', () => {
     isDark = !isDark;
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
     applyTheme(isDark);
   });
 
@@ -238,10 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   searchInput.addEventListener(
-    "input",
+    'input',
     debounce(() => {
       const term = searchInput.value.trim().toLowerCase();
-      clearSearch.classList.toggle("d-none", !term);
+      clearSearch.classList.toggle('d-none', !term);
       if (!term) return renderStreams(allStreams);
 
       renderStreams(
@@ -255,9 +261,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300)
   );
 
-  clearSearch.addEventListener("click", () => {
-    searchInput.value = "";
-    clearSearch.classList.add("d-none");
+  clearSearch.addEventListener('click', () => {
+    searchInput.value = '';
+    clearSearch.classList.add('d-none');
     renderStreams(allStreams);
   });
 
@@ -265,13 +271,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // RESTORED: Service Worker registration
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register("service-worker.js")
-      .then((reg) => console.log("Service Worker registered:", reg))
+      .register('service-worker.js')
+      .then((reg) => console.log('Service Worker registered:', reg))
       .catch((err) =>
-        console.error("Service Worker registration failed:", err)
+        console.error('Service Worker registration failed:', err)
       );
   });
 }
