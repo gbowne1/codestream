@@ -1,18 +1,71 @@
 [
   {
-    "id": "1",
-    "title": "Live JavaScript Coding",
+    "id": "stream_001",
+    "title": "Building a Real-Time Chat App with JavaScript",
     "user": "devAlice",
+    "avatar": "/src/assets/images/avatar-placeholder.png",
     "viewers": 1234,
-    "img": "/src/assets/images/preview-placeholder.jpg",
-    "tags": ["JavaScript", "Web"]
+
+    "category": "Web Development",
+    "subCategory": "JavaScript",
+
+    "primaryLanguage": "English",
+    "secondaryLanguage": "Spanish",
+    "country": "United States",
+
+    "programmingLanguages": ["JavaScript"],
+    "frameworks": ["React", "Node.js"],
+    "editor": ["VSCode"],
+    "architecture": ["Windows", "Mac"],
+    "cpuArch": ["x86-64"],
+
+    "tags": [
+      "JavaScript",
+      "Web",
+      "Frontend",
+      "Backend",
+      "Real-Time",
+      "React",
+      "Node"
+    ],
+
+    "verified": true,
+    "mature": false,
+
+    "img": "/src/assets/images/preview-placeholder.jpg"
   },
   {
-    "id": "2",
-    "title": "Rust Systems Programming",
+    "id": "stream_002",
+    "title": "High-Performance Systems Programming in Rust",
     "user": "rustacean",
+    "avatar": "/src/assets/images/avatar-placeholder.png",
     "viewers": 856,
-    "img": "/src/assets/images/preview-placeholder.jpg",
-    "tags": ["Rust", "Systems"]
+
+    "category": "Game Development",
+    "subCategory": "Modding",
+
+    "primaryLanguage": "English",
+    "secondaryLanguage": "German",
+    "country": "Germany",
+
+    "programmingLanguages": ["Rust"],
+    "frameworks": [],
+    "editor": ["Neovim"],
+    "architecture": ["Linux"],
+    "cpuArch": ["x86-64"],
+
+    "tags": [
+      "Rust",
+      "Systems",
+      "Low-Level",
+      "Performance",
+      "GameDev",
+      "Modding"
+    ],
+
+    "verified": false,
+    "mature": false,
+
+    "img": "/src/assets/images/preview-placeholder.jpg"
   }
 ]
