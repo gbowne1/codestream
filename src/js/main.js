@@ -9,17 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewContainer = document.getElementById('streamGrid');
   const popularTagsContainer = document.getElementById('popularTags');
 
+  // 🔹 FILTER UI (future / optional)
+  const categoryFilter = document.getElementById('categoryFilter');
+  const subCategoryFilter = document.getElementById('subCategoryFilter');
+
   let allStreams = [];
 
+  /* ================= HELPERS ================= */
+
   function formatViewers(count) {
-    if (count >= 1000) {
-      return (count / 1000).toFixed(1) + 'K';
-    }
+    if (count >= 1000) return (count / 1000).toFixed(1) + 'K';
     return count.toLocaleString();
   }
 
+  /* ================= RENDER STREAMS ================= */
+
   function renderStreams(streams) {
     previewContainer.innerHTML = '';
+
     if (!streams || streams.length === 0) {
       previewContainer.innerHTML =
         '<p class="text-muted">No streams found.</p>';
@@ -36,14 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div class="card shadow-sm h-100">
           <img src="${stream.img}" class="card-img-top" loading="lazy"
-               alt="Stream preview for ${stream.title}" />
+            alt="Stream preview for ${stream.title}" />
           <div class="card-body">
             <h3 class="card-title h6">${stream.title}</h3>
-            <p class="card-text text-muted mb-1">${stream.user}</p>
-            <p class="viewer-count text-muted small mb-2">
-              <span class="viewer-number">${formatViewers(
-                stream.viewers
-              )}</span> viewers
+            <p class="text-muted mb-1">${stream.user}</p>
+            <p class="small text-muted mb-2">
+              ${formatViewers(stream.viewers)} viewers
             </p>
             ${stream.tags
               .map(
@@ -61,68 +66,95 @@ document.addEventListener('DOMContentLoaded', () => {
     previewContainer.appendChild(fragment);
   }
 
-  /**
-   * Helper function to handle the filtering logic
-   */
+  /* ================= FILTERING LOGIC ================= */
+
+  function getFilteredStreams(streams, filters) {
+    return streams.filter((stream) => {
+      if (filters.category && stream.category !== filters.category) {
+        return false;
+      }
+
+      if (filters.subCategory && stream.subCategory !== filters.subCategory) {
+        return false;
+      }
+
+      if (
+        filters.programmingLanguages?.length &&
+        !filters.programmingLanguages.some((lang) =>
+          stream.programmingLanguages?.includes(lang)
+        )
+      ) {
+        return false;
+      }
+
+      if (filters.mature === false && stream.mature) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
+  function applyFilters() {
+    const filters = {
+      category: categoryFilter?.value || '',
+      subCategory: subCategoryFilter?.value || '',
+      mature: false
+    };
+
+    const filtered = getFilteredStreams(allStreams, filters);
+    renderStreams(filtered);
+  }
+
+  /* ================= TAG FILTER ================= */
+
   const handleTagFilter = (tagName) => {
     const tag = tagName.trim().toLowerCase();
-    const filtered = allStreams.filter((stream) =>
-      stream.tags.some((t) => t.toLowerCase() === tag)
+
+    renderStreams(
+      allStreams.filter((stream) =>
+        stream.tags.some((t) => t.toLowerCase() === tag)
+      )
     );
-    renderStreams(filtered);
-    searchInput.value = `#${tagName.trim()}`;
-    if (clearSearch) clearSearch.classList.remove('d-none');
+
+    searchInput.value = `#${tagName}`;
+    clearSearch.classList.remove('d-none');
   };
 
-  /**
-   * EVENT DELEGATION: Single handler for the entire grid
-   */
-  const handleGridInteraction = (e) => {
-    const target = e.target;
+  /* ================= EVENT DELEGATION ================= */
 
-    // 1. Check if a Tag Badge was clicked
-    const badge = target.closest('.tag-badge');
+  previewContainer.addEventListener('click', (e) => {
+    const badge = e.target.closest('.tag-badge');
     if (badge) {
       handleTagFilter(badge.textContent);
       return;
     }
 
-    // 2. Check if the Stream Card itself was clicked
-    const card = target.closest('article.col');
-    if (card && card.dataset.streamId) {
+    const card = e.target.closest('article.col');
+    if (card) {
       const stream = allStreams.find((s) => s.id == card.dataset.streamId);
       if (stream) openStreamDetail(stream);
     }
-  };
+  });
 
-  // Attach dynamic grid listeners ONCE
-  previewContainer.addEventListener('click', handleGridInteraction);
-
-  // Handle accessibility (Enter/Space) via delegation
   previewContainer.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
       if (e.target.classList.contains('tag-badge')) {
-        e.preventDefault();
         handleTagFilter(e.target.textContent);
-      } else {
-        handleGridInteraction(e);
       }
     }
   });
 
-  // Delegate listeners for the "Popular Tags" section
-  if (popularTagsContainer) {
-    popularTagsContainer.addEventListener('click', (e) => {
-      const filterBadge = e.target.closest('.tag-filter');
-      if (filterBadge) {
-        handleTagFilter(filterBadge.textContent);
-      }
-    });
-  }
+  popularTagsContainer?.addEventListener('click', (e) => {
+    const badge = e.target.closest('.tag-filter');
+    if (badge) handleTagFilter(badge.textContent);
+  });
+
+  /* ================= MODAL ================= */
 
   function openStreamDetail(stream) {
-    const existingModal = document.querySelector('.stream-detail-modal');
-    if (existingModal) existingModal.remove();
+    document.querySelector('.stream-detail-modal')?.remove();
 
     const modal = document.createElement('div');
     modal.className = 'stream-detail-modal';
@@ -130,33 +162,20 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.innerHTML = `
       <div class="stream-detail-overlay"></div>
       <div class="stream-detail-content">
-        <button class="close-modal" aria-label="Close stream detail">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-        <img src="${stream.img}" alt="${stream.title}" class="img-fluid mb-3"/>
+        <button class="close-modal" aria-label="Close">&times;</button>
+        <img src="${stream.img}" class="img-fluid mb-3"/>
         <h2 class="h5">${stream.title}</h2>
-        <p class="text-muted mb-1">${stream.user}</p>
-        <p class="small text-muted">
-          ${formatViewers(stream.viewers)} viewers
-        </p>
-        <div class="mt-2">
-          ${stream.tags
-            .map((tag) => `<span class="badge bg-primary me-1">${tag}</span>`)
-            .join('')}
-        </div>
+        <p class="text-muted">${stream.user}</p>
       </div>
     `;
 
     document.body.appendChild(modal);
 
+    const escHandler = (e) => e.key === 'Escape' && close();
+
     const close = () => {
       document.removeEventListener('keydown', escHandler);
       modal.remove();
-    };
-
-    const escHandler = (e) => {
-      if (e.key === 'Escape') close();
     };
 
     modal.querySelector('.close-modal').onclick = close;
@@ -164,102 +183,48 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', escHandler);
   }
 
+  /* ================= FETCH STREAMS ================= */
+
   async function fetchStreams() {
     try {
-      const response = await fetch('/api/streams');
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+      const res = await fetch('/api/streams');
+      const data = await res.json();
 
-      // Fix for Issue #25: Map JSON keys to match the UI expectations
-      allStreams = data.map((stream) => ({
-        ...stream,
-        img: stream.thumbnail, // Map 'thumbnail' to 'img'
-        tags: [stream.category], // Map 'category' string to a 'tags' array
+      allStreams = data.map((s) => ({
+        ...s,
+        img: s.thumbnail || s.img,
+        tags: s.tags || [s.category]
       }));
 
       renderStreams(allStreams);
-    } catch (error) {
-      console.error('Failed to fetch streams:', error);
+    } catch {
       previewContainer.innerHTML =
-        '<p class="text-danger">Error loading streams. Make sure the API server is running (npm run api).</p>';
+        '<p class="text-danger">Failed to load streams.</p>';
     }
   }
 
-  // --- UI CONTROLS ---
+  /* ================= FILTER LISTENERS ================= */
 
-  const updateDrawerState = (isOpen) => {
-    if (isOpen) {
-      drawer.classList.add('open');
-      drawerOverlay.classList.remove('d-none');
-      drawerToggle.setAttribute('aria-expanded', 'true');
-    } else {
-      drawer.classList.remove('open');
-      drawerOverlay.classList.add('d-none');
-      drawerToggle.setAttribute('aria-expanded', 'false');
-    }
-  };
+  categoryFilter?.addEventListener('change', applyFilters);
+  subCategoryFilter?.addEventListener('change', applyFilters);
 
-  drawerToggle.addEventListener('click', () => {
-    updateDrawerState(!drawer.classList.contains('open'));
+  /* ================= SEARCH ================= */
+
+  searchInput.addEventListener('input', () => {
+    const term = searchInput.value.toLowerCase().trim();
+    clearSearch.classList.toggle('d-none', !term);
+
+    if (!term) return renderStreams(allStreams);
+
+    renderStreams(
+      allStreams.filter(
+        (s) =>
+          s.title.toLowerCase().includes(term) ||
+          s.user.toLowerCase().includes(term) ||
+          s.tags.some((t) => t.toLowerCase().includes(term))
+      )
+    );
   });
-
-  document.addEventListener('click', (e) => {
-    if (
-      drawer.classList.contains('open') &&
-      !drawer.contains(e.target) &&
-      !drawerToggle.contains(e.target)
-    ) {
-      updateDrawerState(false);
-    }
-  });
-
-  drawerClose.addEventListener('click', () => updateDrawerState(false));
-  // Drawer overlay click → close drawer
-  drawerOverlay.addEventListener('click', () => {
-    updateDrawerState(false);
-  });
-
-  const applyTheme = (isDark) => {
-    document.body.classList.toggle('dark', isDark);
-    const icon = themeToggle.querySelector('i');
-    icon.classList.toggle('fa-moon', !isDark);
-    icon.classList.toggle('fa-sun', isDark);
-  };
-
-  let isDark = localStorage.getItem('theme') === 'dark';
-  applyTheme(isDark);
-
-  themeToggle.addEventListener('click', () => {
-    isDark = !isDark;
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    applyTheme(isDark);
-  });
-
-  function debounce(func, delay) {
-    let timeout;
-    return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), delay);
-    };
-  }
-
-  searchInput.addEventListener(
-    'input',
-    debounce(() => {
-      const term = searchInput.value.trim().toLowerCase();
-      clearSearch.classList.toggle('d-none', !term);
-      if (!term) return renderStreams(allStreams);
-
-      renderStreams(
-        allStreams.filter(
-          (s) =>
-            s.title.toLowerCase().includes(term) ||
-            s.user.toLowerCase().includes(term) ||
-            s.tags.some((t) => t.toLowerCase().includes(term))
-        )
-      );
-    }, 300)
-  );
 
   clearSearch.addEventListener('click', () => {
     searchInput.value = '';
@@ -267,17 +232,44 @@ document.addEventListener('DOMContentLoaded', () => {
     renderStreams(allStreams);
   });
 
+  /* ================= DRAWER ================= */
+
+  const updateDrawerState = (open) => {
+    drawer.classList.toggle('open', open);
+    drawerOverlay.classList.toggle('d-none', !open);
+    drawerToggle.setAttribute('aria-expanded', open);
+  };
+
+  drawerToggle.onclick = () =>
+    updateDrawerState(!drawer.classList.contains('open'));
+  drawerClose.onclick = () => updateDrawerState(false);
+  drawerOverlay.onclick = () => updateDrawerState(false);
+
+  /* ================= THEME ================= */
+
+  let isDark = localStorage.getItem('theme') === 'dark';
+
+  const applyTheme = () => {
+    document.body.classList.toggle('dark', isDark);
+    themeToggle.querySelector('i').className =
+      isDark ? 'fas fa-sun' : 'fas fa-moon';
+  };
+
+  applyTheme();
+
+  themeToggle.onclick = () => {
+    isDark = !isDark;
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    applyTheme();
+  };
+
   fetchStreams();
 });
 
-// RESTORED: Service Worker registration
+/* ================= SERVICE WORKER ================= */
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('service-worker.js')
-      .then((reg) => console.log('Service Worker registered:', reg))
-      .catch((err) =>
-        console.error('Service Worker registration failed:', err)
-      );
+    navigator.serviceWorker.register('/service-worker.js');
   });
 }
