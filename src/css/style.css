@@ -31,6 +31,18 @@ body {
   line-height: 1.6;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* This block handles the manual theme toggle */
 body.dark {
   --color-background: #111;
@@ -208,6 +220,17 @@ body.dark .badge {
 
 .viewer-number.pulse {
   animation: pulse 0.3s ease-in-out;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #dc3545;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+  animation: pulse 1.2s ease-in-out infinite;
 }
 
 /* ================================

@@ -7,7 +7,20 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: 3000,
+    // Use a different port than the API server
+    port: 3001,
     open: true,
+    // Allow importing files from one level up (src/ is outside public/)
+    fs: {
+      strict: false,
+      allow: ['..'],
+    },
+    // Proxy API calls to the Express server
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
   },
 });
