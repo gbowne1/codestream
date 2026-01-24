@@ -22,6 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return count.toLocaleString();
   }
 
+  // 🔹 DEBOUNCE HELPER
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
   /* ================= RENDER STREAMS ================= */
 
   function renderStreams(streams) {
@@ -208,6 +221,34 @@ document.addEventListener('DOMContentLoaded', () => {
   categoryFilter?.addEventListener('change', applyFilters);
   subCategoryFilter?.addEventListener('change', applyFilters);
 
+   // 🔹 SEARCH LOGIC (extracted for debounce)
+  function performSearch() {
+    const term = searchInput.value.toLowerCase().trim();
+    clearSearch.classList.toggle('d-none', !term);
+
+    if (!term) return renderStreams(allStreams);
+
+    renderStreams(
+      allStreams.filter(
+        (s) =>
+          s.title.toLowerCase().includes(term) ||
+          s.user.toLowerCase().includes(term) ||
+          s.tags.some((t) => t.toLowerCase().includes(term))
+      )
+    );
+  }
+
+  // 🔹 DEBOUNCED SEARCH (250ms delay)
+  const debouncedSearch = debounce(performSearch, 250);
+
+  searchInput.addEventListener('input', debouncedSearch);
+
+  clearSearch.addEventListener('click', () => {
+    searchInput.value = '';
+    clearSearch.classList.add('d-none');
+    renderStreams(allStreams);
+  });
+  
   /* ================= SEARCH ================= */
 
   searchInput.addEventListener('input', () => {
