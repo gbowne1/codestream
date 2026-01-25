@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const card = e.target.closest('article.col');
     if (card) {
-      const stream = allStreams.find((s) => s.id == card.dataset.streamId);
+      const stream = allStreams.find((s) => s.id === Number(card.dataset.streamId));
       if (stream) openStreamDetail(stream);
     }
   });
