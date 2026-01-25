@@ -184,12 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.body.appendChild(modal);
 
-    const escHandler = (e) => e.key === 'Escape' && close();
-
     const close = () => {
       document.removeEventListener('keydown', escHandler);
       modal.remove();
     };
+
+    const escHandler = (e) => {
+       if (e.key === 'Escape') close();
+    };
+
 
     modal.querySelector('.close-modal').onclick = close;
     modal.querySelector('.stream-detail-overlay').onclick = close;
