@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = "devstream-v1";
+const CACHE_NAME = "devstream-v2";
 
 // List of resources to cache
 const CACHE_RESOURCES = [
@@ -50,6 +50,11 @@ self.addEventListener("activate", (event) => {
 
 // Fetch event handler with cache-first strategy
 self.addEventListener("fetch", (event) => {
+    // 1. Bypass Service Worker for API requests (Network Only)
+    if (event.request.url.includes('/api/')) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((response) => {
             if (response) {
@@ -67,11 +72,11 @@ self.addEventListener("fetch", (event) => {
                 );
                 return response;
             }
-            
+
             // Handle non-cached requests
             return fetch(event.request).catch(error => {
                 console.error("Network request failed:", error);
-                
+
                 // Serve offline fallback for navigation requests
                 if (event.request.mode === 'navigate') {
                     return caches.match('/offline.html');
