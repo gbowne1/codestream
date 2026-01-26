@@ -73,75 +73,9 @@ CodeStream is built for technical creators and learners, including:
 
 ## 🚀 Installation & Setup
 
-Because this is a **full‑stack application**, you must run the **backend** and **frontend** separately.
+Detailed developer setup instructions are maintained in the repository docs:
 
-### 1️⃣ Prerequisites
-
-- Node.js **v16+**
-- MongoDB (Local or Atlas)
-
----
-
-### 2️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/gbowne1/codestream.git
-cd codestream
-```
-
----
-
-### 3️⃣ Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-### 4️⃣ Configure Environment Variables
-
-Create a `.env` file in the root folder and add:
-
-```env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/devstream
-JWT_SECRET=your_super_secret_key_here
-```
-
-> If you are using **MongoDB Atlas**, replace the `MONGODB_URI` with your cloud connection string.
-
----
-
-### 5️⃣ Run the Application
-
-Open **two terminals**.
-
-#### Terminal 1 – Backend API
-
-```bash
-npm run api
-```
-
-Runs Express on **[http://localhost:3000](http://localhost:3000)**
-
-#### Terminal 2 – Frontend UI
-
-```bash
-npm run dev
-```
-
-Runs Vite on **[http://localhost:5173](http://localhost:5173)**
-
----
-
-### 6️⃣ Open in Browser
-
-Go to:
-
-```
-http://localhost:5173
-```
+- **Developer setup guide**: `docs/DEVSETUP.md` — contains step-by-step instructions to run the backend, frontend, database, environment variables, linting, and troubleshooting.
 
 ---
 
