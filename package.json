@@ -23,9 +23,17 @@
   "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",
+    "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
-    "express": "^5.2.1"
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "flv.js": "^1.6.2",
+    "mongoose": "^9.1.5",
+    "node-media-server": "^4.2.4",
+    "obs-websocket-js": "^5.0.7",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

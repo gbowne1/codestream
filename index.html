@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- ================= BASIC META ================= -->
   <meta charset="UTF-8" />
@@ -7,9 +8,7 @@
   <meta name="theme-color" content="#ffffff" />
 
   <!-- ================= SECURITY (CSP) ================= -->
-  <meta
-    http-equiv="Content-Security-Policy"
-    content="
+  <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
       script-src 'self' https://cdn.jsdelivr.net;
       style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
@@ -19,12 +18,12 @@
       object-src 'none';
       base-uri 'self';
       frame-ancestors 'none';
-    "
-  />
+    " />
 
   <!-- ================= SEO ================= -->
   <title>DevStream | Live Coding & Game Development</title>
-  <meta name="description" content="DevStream is a live streaming platform for developers, coders, and game creators." />
+  <meta name="description"
+    content="DevStream is a live streaming platform for developers, coders, and game creators." />
   <meta name="keywords" content="live coding, game development, programming, software, streaming" />
   <meta name="author" content="DevStream" />
 
@@ -47,16 +46,10 @@
   <link rel="icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    crossorigin="anonymous"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
 
-  <link
-    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="/src/css/style.css" />
 </head>
@@ -75,25 +68,18 @@
           <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Browse</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Schedule</a></li>
+          <li class="nav-item"><a href="/go-live.html" class="nav-link text-danger fw-bold"><i
+                class="fas fa-video me-1"></i>Go Live</a></li>
 
           <li class="nav-item">
-            <button
-              id="themeToggle"
-              class="btn btn-sm btn-outline-secondary"
-              aria-label="Toggle theme"
-            >
+            <button id="themeToggle" class="btn btn-sm btn-outline-secondary" aria-label="Toggle theme">
               <i class="fas fa-moon"></i>
             </button>
           </li>
 
           <li class="nav-item">
-            <button
-              id="drawerToggle"
-              class="btn btn-sm btn-outline-success"
-              aria-label="Open category menu"
-              aria-expanded="false"
-              aria-controls="categoryDrawer"
-            >
+            <button id="drawerToggle" class="btn btn-sm btn-outline-success" aria-label="Open category menu"
+              aria-expanded="false" aria-controls="categoryDrawer">
               <i class="fas fa-bars"></i>
             </button>
           </li>
@@ -103,11 +89,8 @@
   </header>
 
   <!-- ================= CATEGORY DRAWER ================= -->
-  <aside
-    id="categoryDrawer"
-    class="position-fixed top-0 start-0 h-100 bg-dark text-white p-4 shadow-lg overflow-auto"
-    aria-hidden="true"
-  >
+  <aside id="categoryDrawer" class="position-fixed top-0 start-0 h-100 bg-dark text-white p-4 shadow-lg overflow-auto"
+    aria-hidden="true">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="h5 mb-0">Categories</h2>
       <button id="drawerClose" class="btn btn-sm btn-light" aria-label="Close menu">
@@ -126,10 +109,7 @@
   </aside>
 
   <!-- Drawer Overlay -->
-  <div
-    id="drawerOverlay"
-    class="position-fixed top-0 start-0 w-100 h-100 bg-black bg-opacity-50 d-none"
-  ></div>
+  <div id="drawerOverlay" class="position-fixed top-0 start-0 w-100 h-100 bg-black bg-opacity-50 d-none"></div>
 
   <!-- ================= MAIN ================= -->
   <main class="container mt-4">
@@ -140,18 +120,9 @@
 
       <!-- Search -->
       <div class="input-group mb-4">
-        <input
-          type="search"
-          id="searchInput"
-          class="form-control"
-          placeholder="Search streams..."
-          aria-label="Search streams"
-        />
-        <button
-          id="clearSearch"
-          class="btn btn-outline-secondary d-none"
-          aria-label="Clear search"
-        >
+        <input type="search" id="searchInput" class="form-control" placeholder="Search streams..."
+          aria-label="Search streams" />
+        <button id="clearSearch" class="btn btn-outline-secondary d-none" aria-label="Clear search">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -168,7 +139,7 @@
     <!-- Popular Tags -->
     <section class="mt-5">
       <h2 class="h5 mb-3">Popular Tags</h2>
-      <div id="popularTags"  class="d-flex flex-wrap gap-2">
+      <div id="popularTags" class="d-flex flex-wrap gap-2">
         <span class="badge bg-primary tag-filter">JavaScript</span>
         <span class="badge bg-primary tag-filter">Python</span>
         <span class="badge bg-primary tag-filter">Rust</span>
@@ -185,12 +156,11 @@
   </footer>
 
   <!-- ================= SCRIPTS ================= -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
 
   <script type="module" src="/src/js/main.js"></script>
 
 </body>
+
 </html>
