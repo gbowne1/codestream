@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const SALT_ROUNDS = 10; 
+const SALT_ROUNDS = 10;
 
 /**
  * @route POST /api/auth/register
@@ -27,12 +27,12 @@ export const register = async (req, res) => {
         // 2. Hash Password
         const salt = await bcrypt.genSalt(SALT_ROUNDS);
         const passwordHashed = await bcrypt.hash(password, salt);
-        
+
         // 3. Create new user instance
         user = new User({
             username,
             email,
-            password: passwordHashed, 
+            password: passwordHashed,
             role: 'user'
         });
 
@@ -40,9 +40,9 @@ export const register = async (req, res) => {
         await user.save();
 
         // 5. Create JWT
-        const payload = { 
-            id: user.id, 
-            role: user.role 
+        const payload = {
+            id: user.id,
+            role: user.role
         };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
@@ -60,7 +60,7 @@ export const register = async (req, res) => {
     } catch (err) {
         // Handle validation errors 
         if (err.code === 11000) {
-             return res.status(400).json({ message: 'Username or email already taken.' });
+            return res.status(400).json({ message: 'Username or email already taken.' });
         }
         console.error(err.message);
         res.status(500).send('Server error during registration.');
@@ -75,26 +75,26 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).json({ message: 'Please enter email and password.' });
+        return res.status(400).json({ message: 'Please fill out all fields.' });
     }
 
     try {
         // 1. Find user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Credentials.' });
+            return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
         // 2. Compare Password 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(444).json({ message: 'Invalid Credentials.' });
+            return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
         // 3. Create JWT
-        const payload = { 
-            id: user.id, 
-            role: user.role 
+        const payload = {
+            id: user.id,
+            role: user.role
         };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
@@ -121,7 +121,7 @@ export const login = async (req, res) => {
  */
 export const getUserDetails = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password'); 
+        const user = await User.findById(req.user.id).select('-password');
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
