@@ -290,7 +290,7 @@ startStreamBtn.addEventListener('click', startStream);
 stopStreamBtn.addEventListener('click', stopStream);
 
 // ============== CLEANUP ON PAGE UNLOAD ==============
-window.addEventListener('beforeunload', (event) => {
+window.addEventListener('beforeunload', () => {
     if (socket && roomId) {
         // Notify server that stream is ending
         socket.emit('stop-stream', roomId);
