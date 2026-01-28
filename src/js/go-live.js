@@ -157,6 +157,14 @@ function createPeerConnection(viewerId) {
 
     pc.onconnectionstatechange = () => {
         console.log(`Connection state with ${viewerId}: ${pc.connectionState}`);
+
+        // Handle viewer disconnect (closed tab, network loss)
+        if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
+            console.log(`Viewer ${viewerId} disconnected`);
+            pc.close();
+            peerConnections.delete(viewerId);
+            updateViewerCount();
+        }
     };
 
     peerConnections.set(viewerId, pc);
@@ -235,6 +243,17 @@ function startStream() {
     socket.on('disconnect', () => {
         updateStatus('Disconnected from server', 'secondary');
     });
+
+    // Handle viewer leaving
+    socket.on('viewer-left', ({ viewerId }) => {
+        console.log('Viewer left:', viewerId);
+        const pc = peerConnections.get(viewerId);
+        if (pc) {
+            pc.close();
+            peerConnections.delete(viewerId);
+            updateViewerCount();
+        }
+    });
 }
 
 function stopStream() {
@@ -269,3 +288,27 @@ shareScreenBtn.addEventListener('click', captureScreen);
 useCameraBtn.addEventListener('click', captureCamera);
 startStreamBtn.addEventListener('click', startStream);
 stopStreamBtn.addEventListener('click', stopStream);
+
+// ============== CLEANUP ON PAGE UNLOAD ==============
+window.addEventListener('beforeunload', (event) => {
+    if (socket && roomId) {
+        // Notify server that stream is ending
+        socket.emit('stop-stream', roomId);
+
+        // Close all connections
+        peerConnections.forEach(pc => pc.close());
+
+        // Stop media tracks
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+        }
+    }
+});
+
+// Handle visibility change (tab hidden/shown)
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && socket && roomId) {
+        console.log('Tab hidden - stream still active');
+        // Optional: Could pause or reduce quality here
+    }
+});

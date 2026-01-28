@@ -230,6 +230,17 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         };
 
+        // Monitor connection state for broadcaster disconnect
+        peerConnection.onconnectionstatechange = () => {
+          console.log('Viewer connection state:', peerConnection.connectionState);
+          if (peerConnection.connectionState === 'disconnected' ||
+            peerConnection.connectionState === 'failed') {
+            modal.querySelector('.status-text').textContent = 'Connection Lost';
+            modal.querySelector('.status-text').classList.remove('text-danger');
+            modal.querySelector('.status-text').classList.add('text-warning');
+          }
+        };
+
         await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
@@ -254,6 +265,20 @@ document.addEventListener('DOMContentLoaded', () => {
       socket.on('error', ({ message }) => {
         modal.querySelector('.status-text').textContent = message || 'Stream not found';
         modal.querySelector('.status-text').classList.add('text-danger');
+      });
+
+      // Handle socket disconnect (server down, network loss)
+      socket.on('disconnect', () => {
+        console.log('Viewer disconnected from signaling server');
+        modal.querySelector('.status-text').textContent = 'Disconnected from server';
+        modal.querySelector('.status-text').classList.add('text-warning');
+      });
+
+      // Cleanup when viewer closes modal or leaves page
+      window.addEventListener('beforeunload', () => {
+        if (socket) {
+          socket.emit('leave-stream', stream.user);
+        }
       });
     }).catch(err => {
       console.error('Failed to load socket.io-client:', err);

@@ -143,15 +143,22 @@ io.on('connection', (socket) => {
     // Disconnect handling
     socket.on('disconnect', () => {
         console.log(`[SOCKET] User disconnected: ${socket.id}`);
-        // Clean up if broadcaster disconnects
+
+        // Check all streams for this socket
         activeStreams.forEach((stream, roomId) => {
             if (stream.broadcaster === socket.id) {
-                io.to(roomId).emit('stream-ended');
+                // Broadcaster disconnected - end the stream for all viewers
+                io.to(roomId).emit('stream-ended', { reason: 'Broadcaster disconnected' });
                 activeStreams.delete(roomId);
                 console.log(`[ENDED] Stream ${roomId} ended (broadcaster disconnected)`);
-            } else {
-                // Remove viewer from list
+            } else if (stream.viewers.includes(socket.id)) {
+                // Viewer disconnected - remove from list and notify broadcaster
                 stream.viewers = stream.viewers.filter(id => id !== socket.id);
+                io.to(stream.broadcaster).emit('viewer-left', {
+                    viewerId: socket.id,
+                    viewerCount: stream.viewers.length
+                });
+                console.log(`[VIEWER] ${socket.id} left ${roomId}. Viewers remaining: ${stream.viewers.length}`);
             }
         });
     });
