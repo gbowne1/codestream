@@ -32,11 +32,21 @@ if (MONGODB_URI) {
     console.log('MONGODB_URI not defined. Skipping database connection (Mock mode).');
 }
 
+// Secure CORS with env based origin
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 //  AUTH ROUTES 
 app.post('/api/auth/register', AuthControllers.register);
 app.post('/api/auth/login', AuthControllers.login);
 
+//  AUTH ROUTES
+app.post('/api/auth/register', AuthControllers.register);
+app.post('/api/auth/login', AuthControllers.login);
 
 /**
  * @route GET /api/auth/me
@@ -52,8 +62,8 @@ app.get('/api/auth/me', auth, AuthControllers.getUserDetails);
  * This demonstrates Role-Based Access Control.
  */
 app.get('/api/admin/dashboard', auth, authorizeRole(['admin']), (req, res) => {
-    // req.user is available here due to the 'auth' middleware
-    res.json({ message: `Access granted, Admin ID: ${req.user.id}.` });
+  // req.user is available here due to the 'auth' middleware
+  res.json({ message: `Access granted, Admin ID: ${req.user.id}.` });
 });
 
 /**
@@ -61,7 +71,7 @@ app.get('/api/admin/dashboard', auth, authorizeRole(['admin']), (req, res) => {
  * This fixes the "Cannot GET /" error by providing a landing page.
  */
 app.get('/', (req, res) => {
-    res.send(`
+  res.send(`
         <div style="font-family: sans-serif; text-align: center; padding-top: 50px;">
             <h1> DevStream API is Online</h1>
             <p>The server is running correctly.</p>
