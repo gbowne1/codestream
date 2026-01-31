@@ -13,13 +13,13 @@
   --primary: #4fc3f7;
 
   --color-background: #fff;
-  --color-text: #111;
+  --color-text: #000;
   --color-card-bg: #fff;
-  --color-card-text: #111;
+  --color-card-text: #000;
   --color-header-bg: #fff;
-  --color-header-text: #111;
+  --color-header-text: #000;
   --color-footer-bg: #f8f9fa;
-  --color-footer-text: #111;
+  --color-footer-text: #000;
 
   --radius: 0.5rem;
 }
@@ -29,6 +29,7 @@ body {
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* This block handles the manual theme toggle */
@@ -43,21 +44,75 @@ body.dark {
   --color-footer-text: #eee;
 }
 
+/* Override Bootstrap's bg-light class in dark mode */
+body.dark.bg-light {
+  background-color: var(--color-background) !important;
+}
+
 /* Header */
 header {
   background-color: var(--color-header-bg);
   color: var(--color-header-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Override Bootstrap's bg-white class on header in dark mode */
+body.dark header.bg-white {
+  background-color: var(--color-header-bg) !important;
 }
 
 /* Navigation links within the header */
 header .nav-link {
-    color: var(--color-header-text); /* Ensure nav links get the header text color */
+    color: #000 !important;
+}
+
+header .nav-link:hover,
+header .nav-link:focus {
+    color: #000 !important;
+    opacity: 0.7;
+}
+
+body.dark header .nav-link {
+    color: #eee !important;
+}
+
+body.dark header .nav-link:hover,
+body.dark header .nav-link:focus {
+    color: #eee !important;
+}
+header a {
+    color: #000 !important;
+}
+header a:hover {
+    color: #000 !important;
+}
+body.dark header a {
+    color: #eee !important;
+}
+body.dark header a:hover {
+    color: #eee !important;
 }
 
 /* Footer */
 footer {
   background-color: var(--color-footer-bg);
   color: var(--color-footer-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Headings - ensure they follow the color scheme */
+h1, h2, h3, h4, h5, h6 {
+  color: #000 !important;
+  transition: color 0.3s ease;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+  color: #eee !important;
 }
 
 
@@ -65,6 +120,7 @@ footer {
 .card {
   background-color: var(--color-card-bg);
   color: var(--color-card-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .card-text {
