@@ -29,6 +29,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "flv.js": "^1.6.2",
+    "helmet": "^8.1.0",
     "mongoose": "^9.1.5",
     "node-media-server": "^4.2.4",
     "obs-websocket-js": "^5.0.7",

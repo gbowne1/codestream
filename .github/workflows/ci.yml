@@ -1,0 +1,45 @@
+name: DevStream CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest 
+
+    strategy:
+      matrix:
+        # Define the Node.js versions to test against
+        node-version: [20, 22, 24]
+      # Continue running other versions even if one fails
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        # Note: npm ci requires package-lock.json to be committed.
+        # If package-lock.json is in .gitignore, change this to: npm install
+        run: npm ci
+
+      - name: Lint Code
+        run: npm run lint
+
+      - name: Check Formatting
+        run: npx prettier --check .
+
+      - name: Build Project
+        run: npm run build
+
+      # Note: If you add a test runner (like Vitest or Jest) later, 
+      # add "npm test" here.
