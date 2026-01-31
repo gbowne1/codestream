@@ -95,6 +95,13 @@ app.get('/api/streams', (req, res) => {
   });
 });
 
+// 404 Not Found handler (must be after all routes)
+app.use((req, res) => {
+    res.status(404).json({
+        error: "Route not found"
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`\n✅ Server successfully started!`);
   console.log(`🏠 Home: http://localhost:${PORT}`);
