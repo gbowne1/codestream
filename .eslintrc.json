@@ -14,5 +14,8 @@
   },
   "rules": {
     "no-console": "off"
+  },
+  "globals": {
+    "clients": "readonly"
   }
 }
