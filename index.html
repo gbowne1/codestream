@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- ================= BASIC META ================= -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
 
-    <!-- ================= SECURITY (CSP) ================= -->
     <meta
       http-equiv="Content-Security-Policy"
       content="
@@ -22,8 +20,8 @@
       "
     />
 
-    <!-- ================= SEO ================= -->
     <title>DevStream | Live Coding & Game Development</title>
+
     <meta
       name="description"
       content="DevStream is a live streaming platform for developers, coders, and game creators."
@@ -34,7 +32,6 @@
     />
     <meta name="author" content="DevStream" />
 
-    <!-- ================= OPEN GRAPH ================= -->
     <meta property="og:title" content="DevStream" />
     <meta
       property="og:description"
@@ -43,7 +40,6 @@
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/src/assets/images/banner.jpg" />
 
-    <!-- ================= TWITTER ================= -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="DevStream" />
     <meta
@@ -52,10 +48,7 @@
     />
     <meta name="twitter:image" content="/src/assets/images/banner.jpg" />
 
-    <!-- ================= PWA ================= -->
     <link rel="manifest" href="/manifest.json" />
-
-    <!-- ================= ICONS & STYLES ================= -->
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -74,7 +67,6 @@
   </head>
 
   <body class="bg-light">
-    <!-- ================= HEADER ================= -->
     <header class="sticky-top bg-white shadow-sm">
       <div class="container d-flex justify-content-between align-items-center py-3">
         <a href="/" class="text-decoration-none text-dark">
@@ -113,7 +105,6 @@
       </div>
     </header>
 
-    <!-- ================= CATEGORY DRAWER ================= -->
     <aside
       id="categoryDrawer"
       class="position-fixed top-0 start-0 h-100 bg-dark text-white p-4 shadow-lg overflow-auto"
@@ -136,13 +127,11 @@
       </ul>
     </aside>
 
-    <!-- Drawer Overlay -->
     <div
       id="drawerOverlay"
       class="position-fixed top-0 start-0 w-100 h-100 bg-black bg-opacity-50 d-none"
     ></div>
 
-    <!-- ================= MAIN ================= -->
     <main class="container mt-4">
       <section aria-labelledby="live-heading">
         <h2 id="live-heading" class="h4 mb-4">Live Streams</h2>
