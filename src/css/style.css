@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
 
 /* Reset and base */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 :root {
-  --font-base: 'Roboto', 'OpenSans', 'Lato', 'Montserrat', 'Noto Sans', 'Oswald', 'Poppins', 'Raleway', system-ui, -apple-system, sans-serif;
+  --font-base:
+    'Roboto', 'OpenSans', 'Lato', 'Montserrat', 'Noto Sans', 'Oswald',
+    'Poppins', 'Raleway', system-ui, -apple-system, sans-serif;
 
   --primary: #4fc3f7;
 
@@ -51,7 +55,9 @@ header {
 
 /* Navigation links within the header */
 header .nav-link {
-    color: var(--color-header-text); /* Ensure nav links get the header text color */
+  color: var(
+    --color-header-text
+  ); /* Ensure nav links get the header text color */
 }
 
 /* Footer */
@@ -59,7 +65,6 @@ footer {
   background-color: var(--color-footer-bg);
   color: var(--color-footer-text);
 }
-
 
 /* Card Styles */
 .card {
@@ -72,11 +77,14 @@ footer {
 }
 
 /* Card texts and viewer counts */
-.card-text, .viewer-count, .card-title {
+.card-text,
+.viewer-count,
+.card-title {
   color: var(--color-card-text);
 }
 
-.card-text, .viewer-count {
+.card-text,
+.viewer-count {
   /* Use card text color to override bootstrap defaults */
   color: var(--color-card-text);
 }
@@ -94,12 +102,14 @@ body.dark .badge.bg-primary {
 #categoryDrawer {
   width: 280px;
   transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    visibility 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   visibility: hidden;
   opacity: 0;
   z-index: 1050;
 }
-
 
 #categoryDrawer.open {
   transform: translateX(0);
@@ -109,12 +119,12 @@ body.dark .badge.bg-primary {
 
 /* Dark mode for drawer when body is dark */
 body.dark #categoryDrawer {
-    background-color: #222; /* Dark background for drawer */
-    color: #eee; /* Light text for drawer */
+  background-color: #222; /* Dark background for drawer */
+  color: #eee; /* Light text for drawer */
 }
 
 body.dark #categoryDrawer a {
-    color: #eee; /* Light text for drawer links */
+  color: #eee; /* Light text for drawer links */
 }
 
 /* Drawer Overlay */
@@ -156,7 +166,6 @@ body.dark #categoryDrawer a {
 .tag-filter:active {
   transform: scale(0.98);
 }
-
 
 .column-gap {
   -moz-column-gap: 1rem; /* For older versions of Firefox */
