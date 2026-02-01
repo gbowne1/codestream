@@ -33,7 +33,9 @@ body {
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* This block handles the manual theme toggle */
@@ -57,7 +59,9 @@ body.dark.bg-light {
 header {
   background-color: var(--color-header-bg);
   color: var(--color-header-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Override Bootstrap's bg-white class on header in dark mode */
@@ -76,11 +80,18 @@ header .nav-link {
 footer {
   background-color: var(--color-footer-bg);
   color: var(--color-footer-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Headings - ensure they follow the color scheme */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #000 !important;
   transition: color 0.3s ease;
 }
@@ -98,7 +109,9 @@ body.dark h6 {
 .card {
   background-color: var(--color-card-bg);
   color: var(--color-card-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .card-text {
