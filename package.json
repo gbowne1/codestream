@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "api": "node server.js"
+    "api": "node server.js",
+    "test": "echo \"No tests configured yet\""
   },
   "keywords": [
     "pwa",
