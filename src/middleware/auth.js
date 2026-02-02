@@ -11,28 +11,29 @@ const JWT_SECRET = process.env.JWT_SECRET;
  */
 
 export const auth = (req, res, next) => {
-    const authHeader = req.header('Authorization');
-    
-    if (!authHeader) {
-        return res.status(401).json({ message: 'No token, authorization denied.' });
-    }
+  const authHeader = req.header('Authorization');
 
-    const token = authHeader.split(' ')[1];
+  if (!authHeader) {
+    return res.status(401).json({ message: 'No token, authorization denied.' });
+  }
 
-    if (!token) {
-        return res.status(401).json({ message: 'Token format invalid. Use Bearer scheme.' });
-    }
+  const token = authHeader.split(' ')[1];
 
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Token format invalid. Use Bearer scheme.' });
+  }
 
-        req.user = decoded;
-        
-        next();
-        
-    } catch (err) {
-        res.status(401).json({ message: 'Token is not valid or has expired.' });
-    }
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    req.user = decoded;
+
+    next();
+  } catch (err) {
+    res.status(401).json({ message: 'Token is not valid or has expired.' });
+  }
 };
 
 /**
@@ -41,11 +42,15 @@ export const auth = (req, res, next) => {
  * @param {string[]} requiredRoles  Array of roles allowed (e.g., ['admin', 'moderator'])
  */
 export const authorizeRole = (requiredRoles) => (req, res, next) => {
-    if (!req.user || !req.user.role) {
-        return res.status(500).json({ message: 'Authorization setup error: User role not found.' });
-    }
-        if (!requiredRoles.includes(req.user.role)) {
-        return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
-    }
-    next();
+  if (!req.user || !req.user.role) {
+    return res
+      .status(500)
+      .json({ message: 'Authorization setup error: User role not found.' });
+  }
+  if (!requiredRoles.includes(req.user.role)) {
+    return res
+      .status(403)
+      .json({ message: 'Access denied. Insufficient permissions.' });
+  }
+  next();
 };
