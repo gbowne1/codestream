@@ -64,11 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
               ${formatViewers(stream.viewers)} viewers
             </p>
             ${stream.tags
-              .map(
-                (tag) =>
-                  `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
-              )
-              .join('')}
+          .map(
+            (tag) =>
+              `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
+          )
+          .join('')}
           </div>
         </div>
       `;
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const escHandler = (e) => {
-       if (e.key === 'Escape') close();
+      if (e.key === 'Escape') close();
     };
 
 
@@ -204,6 +204,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchStreams() {
     try {
       const res = await fetch('/api/streams');
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status} ${res.statusText}`);
+      }
+
       const data = await res.json();
 
       allStreams = data.map((s) => ({
@@ -213,9 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }));
 
       renderStreams(allStreams);
-    } catch {
+    } catch (err) {
+      console.error('Failed to load streams:', err);
       previewContainer.innerHTML =
-        '<p class="text-danger">Failed to load streams.</p>';
+        '<div class="text-center py-5"><p class="text-danger">Failed to load streams. Please refresh the page.</p></div>';
     }
   }
 
@@ -224,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
   categoryFilter?.addEventListener('change', applyFilters);
   subCategoryFilter?.addEventListener('change', applyFilters);
 
-   // 🔹 SEARCH LOGIC (extracted for debounce)
+  // 🔹 SEARCH LOGIC (extracted for debounce)
   function performSearch() {
     const term = searchInput.value.toLowerCase().trim();
     clearSearch.classList.toggle('d-none', !term);
@@ -251,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearSearch.classList.add('d-none');
     renderStreams(allStreams);
   });
-  
+
   /* ================= SEARCH ================= */
 
   searchInput.addEventListener('input', () => {
