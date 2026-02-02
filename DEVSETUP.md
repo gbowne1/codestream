@@ -5,10 +5,10 @@ This document explains how to set up and run the **codestream / DevStream** proj
 ## Project Structure (Example)
 
 root/
- ├─ client/     # Frontend (Vite)
- ├─ server/     # Backend (Node.js + Express)
- ├─ docs/       # Documentation
- └─ README.md
+├─ client/ # Frontend (Vite)
+├─ server/ # Backend (Node.js + Express)
+├─ docs/ # Documentation
+└─ README.md
 
 Folder names may vary based on the repository.
 
@@ -16,16 +16,16 @@ Folder names may vary based on the repository.
 
 Install the following tools:
 
-* Node.js (v18 or later)
+- Node.js (v18 or later)
   [https://nodejs.org](https://nodejs.org)
 
-* Git
+- Git
   [https://git-scm.com](https://git-scm.com)
 
-* npm (comes with Node.js)
+- npm (comes with Node.js)
   [https://www.npmjs.com](https://www.npmjs.com)
 
-* Database (MongoDB / PostgreSQL / MySQL – depending on project)
+- Database (MongoDB / PostgreSQL / MySQL – depending on project)
 
 Verify installation:
 
@@ -128,7 +128,6 @@ sudo service postgresql start
 PostgreSQL docs:
 [https://www.postgresql.org/docs](https://www.postgresql.org/docs)
 
-
 ## Environment Variables
 
 Create `.env` files if required.
@@ -159,7 +158,6 @@ bash
 cd client
 npm run dev
 
-
 Open in browser:
 
 http://localhost:5173
@@ -174,8 +172,8 @@ Check routes inside `server/routes`.
 
 API tools:
 
-* Postman → [https://www.postman.com](https://www.postman.com)
-* Insomnia → [https://insomnia.rest](https://insomnia.rest)
+- Postman → [https://www.postman.com](https://www.postman.com)
+- Insomnia → [https://insomnia.rest](https://insomnia.rest)
 
 ## Linting
 
@@ -204,13 +202,13 @@ Prettier docs:
 
 ## UI Libraries
 
-* Bootstrap
+- Bootstrap
   [https://getbootstrap.com](https://getbootstrap.com)
 
-* Font Awesome
+- Font Awesome
   [https://fontawesome.com](https://fontawesome.com)
 
-* Vite
+- Vite
   [https://vitejs.dev](https://vitejs.dev)
 
 ## Common Problems
@@ -228,11 +226,11 @@ npm install
 
 ## Useful Links
 
-* Git → [https://git-scm.com](https://git-scm.com)
-* Node.js → [https://nodejs.org](https://nodejs.org)
-* Express → [https://expressjs.com](https://expressjs.com)
-* Vite → [https://vitejs.dev](https://vitejs.dev)
-* Bootstrap → [https://getbootstrap.com](https://getbootstrap.com)
-* Font Awesome → [https://fontawesome.com](https://fontawesome.com)
-* ESLint → [https://eslint.org](https://eslint.org)
-* Prettier → [https://prettier.io](https://prettier.io)
+- Git → [https://git-scm.com](https://git-scm.com)
+- Node.js → [https://nodejs.org](https://nodejs.org)
+- Express → [https://expressjs.com](https://expressjs.com)
+- Vite → [https://vitejs.dev](https://vitejs.dev)
+- Bootstrap → [https://getbootstrap.com](https://getbootstrap.com)
+- Font Awesome → [https://fontawesome.com](https://fontawesome.com)
+- ESLint → [https://eslint.org](https://eslint.org)
+- Prettier → [https://prettier.io](https://prettier.io)
