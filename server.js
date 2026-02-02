@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -16,11 +17,18 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Enable CORS so your frontend can communicate with this API
-// Middleware setup (must be before routes)
-app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS
-app.use(express.json());
+// Security headers
+app.use(helmet());
 
+// Secure CORS with env based origin
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+app.use(express.json());
 // DATABASE CONNECTION
 mongoose
   .connect(MONGODB_URI)
@@ -85,6 +93,13 @@ app.get('/api/streams', (req, res) => {
         .json({ error: 'Internal Server Error: Invalid JSON format.' });
     }
   });
+});
+
+// 404 Not Found handler (must be after all routes)
+app.use((req, res) => {
+    res.status(404).json({
+        error: "Route not found"
+    });
 });
 
 app.listen(PORT, () => {

@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const card = e.target.closest('article.col');
     if (card) {
-      const stream = allStreams.find((s) => s.id == card.dataset.streamId);
+      const stream = allStreams.find((s) => s.id === Number(card.dataset.streamId));
       if (stream) openStreamDetail(stream);
     }
   });
@@ -184,12 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.body.appendChild(modal);
 
-    const escHandler = (e) => e.key === 'Escape' && close();
-
     const close = () => {
       document.removeEventListener('keydown', escHandler);
       modal.remove();
     };
+
+    const escHandler = (e) => {
+       if (e.key === 'Escape') close();
+    };
+
 
     modal.querySelector('.close-modal').onclick = close;
     modal.querySelector('.stream-detail-overlay').onclick = close;
