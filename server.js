@@ -20,6 +20,7 @@ const __dirname = dirname(__filename);
 // Enable CORS so your frontend can communicate with this API
 // Middleware setup (must be before routes)
 app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS
+app.use(helmet());
 app.use(express.json());
 
 // DATABASE CONNECTION
