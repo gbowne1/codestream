@@ -4,7 +4,7 @@
   "description": "A live streaming platform for developers.",
   "main": "src/js/main.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -23,8 +23,13 @@
   "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",
+    "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5",
+    "socket.io": "^4.8.3"
     "express": "^5.2.1",
     "helmet": "^8.1.0"
   },
