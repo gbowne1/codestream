@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 // service-worker.js
 const CACHE_NAME = "devstream-v2";
 
