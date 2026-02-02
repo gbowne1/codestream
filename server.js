@@ -45,6 +45,7 @@ if (MONGODB_URI) {
 } else {
     console.log('MONGODB_URI not defined. Skipping database connection (Mock mode).');
 app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS
+app.use(helmet());
 app.use(express.json());
 
 // DATABASE CONNECTION
