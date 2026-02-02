@@ -1,4 +1,6 @@
-# 📺 CodeStream (Prototype)
+# codestream
+
+This is the code for a live streaming platform for programmers currently called DevStream but naming things is hard so this name is a placeholder.
 
 CodeStream (initially named **DevStream**) is a **Full-Stack Web Application** designed as a **live streaming platform specifically for developers**.
 
