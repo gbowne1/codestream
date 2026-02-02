@@ -208,6 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchStreams() {
     try {
       const res = await fetch('/api/streams');
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status} ${res.statusText}`);
+      }
+
       const data = await res.json();
 
       allStreams = data.map((s) => ({
@@ -217,9 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }));
 
       renderStreams(allStreams);
-    } catch {
+    } catch (err) {
+      console.error('Failed to load streams:', err);
       previewContainer.innerHTML =
-        '<p class="text-danger">Failed to load streams.</p>';
+        '<div class="text-center py-5"><p class="text-danger">Failed to load streams. Please refresh the page.</p></div>';
     }
   }
 
