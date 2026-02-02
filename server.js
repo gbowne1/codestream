@@ -95,6 +95,14 @@ app.get('/api/streams', (req, res) => {
   });
 });
 
+app.get('/health', (req,res)=>{
+  res.status(200).json({
+    status: 'OK',
+    message: 'Server is healthy',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // 404 Not Found handler (must be after all routes)
 app.use((req, res) => {
     res.status(404).json({
