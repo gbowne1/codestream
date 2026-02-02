@@ -67,6 +67,20 @@ app.get('/api/admin/dashboard', auth, authorizeRole(['admin']), (req, res) => {
 });
 
 /**
+ * Health Check Endpoint
+ * Returns 200 OK with server status and timestamp
+ */
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Server is healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+/**
  * Root Route
  * This fixes the "Cannot GET /" error by providing a landing page.
  */
