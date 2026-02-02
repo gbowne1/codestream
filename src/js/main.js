@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filters = {
       category: categoryFilter?.value || '',
       subCategory: subCategoryFilter?.value || '',
-      mature: false
+      mature: false,
     };
 
     const filtered = getFilteredStreams(allStreams, filters);
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
       allStreams = data.map((s) => ({
         ...s,
         img: s.thumbnail || s.img,
-        tags: s.tags || [s.category]
+        tags: s.tags || [s.category],
       }));
 
       renderStreams(allStreams);
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   categoryFilter?.addEventListener('change', applyFilters);
   subCategoryFilter?.addEventListener('change', applyFilters);
 
-   // 🔹 SEARCH LOGIC (extracted for debounce)
+  // 🔹 SEARCH LOGIC (extracted for debounce)
   function performSearch() {
     const term = searchInput.value.toLowerCase().trim();
     clearSearch.classList.toggle('d-none', !term);
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearSearch.classList.add('d-none');
     renderStreams(allStreams);
   });
-  
+
   /* ================= SEARCH ================= */
 
   searchInput.addEventListener('input', () => {
@@ -292,8 +292,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const applyTheme = () => {
     document.body.classList.toggle('dark', isDark);
-    themeToggle.querySelector('i').className =
-      isDark ? 'fas fa-sun' : 'fas fa-moon';
+    themeToggle.querySelector('i').className = isDark
+      ? 'fas fa-sun'
+      : 'fas fa-moon';
   };
 
   applyTheme();
