@@ -122,9 +122,23 @@
     .form-control {
       padding: 0.875rem 1rem;
       border: 2px solid #e5e7eb;
+      color: #9ca3af;
       border-radius: 10px;
       font-size: 1rem;
       transition: all 0.2s;
+    }
+
+    .custom-input {
+      color: #111827;
+      /* text color when user types */
+    }
+
+    /* Placeholder color */
+    .custom-input::placeholder {
+      color: #9ca3af;
+      /* placeholder color */
+      opacity: 1;
+      /* important for Firefox */
     }
 
     body.dark .form-control {
@@ -291,13 +305,13 @@
       <form id="loginForm">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" placeholder="you@example.com" required
+          <input type="email" class="form-control custom-input" id="email" placeholder="you@example.com" required
             autocomplete="email" />
         </div>
 
         <div class="mb-4">
           <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="Enter your password" required
+          <input type="password" class="form-control custom-input" id="password" placeholder="Enter your password" required
             autocomplete="current-password" />
         </div>
 

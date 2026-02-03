@@ -127,6 +127,19 @@
             transition: all 0.2s;
         }
 
+        .custom-input {
+            color: #111827;
+            /* text color when user types */
+        }
+
+        /* Placeholder color */
+        .custom-input::placeholder {
+            color: #9ca3af;
+            /* placeholder color */
+            opacity: 1;
+            /* important for Firefox */
+        }
+
         body.dark .form-control {
             background: #2d2d3d;
             border-color: #3d3d4d;
@@ -300,20 +313,20 @@
             <form id="registerForm">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Choose a username" required
-                        autocomplete="username" />
+                    <input type="text" class="form-control custom-input" id="username" placeholder="Choose a username"
+                        required autocomplete="username" />
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com" required
-                        autocomplete="email" />
+                    <input type="email" class="form-control custom-input" id="email" placeholder="you@example.com"
+                        required autocomplete="email" />
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Create a strong password"
-                        required autocomplete="new-password" minlength="6" />
+                    <input type="password" class="form-control custom-input" id="password"
+                        placeholder="Create a strong password" required autocomplete="new-password" minlength="6" />
                     <small class="form-text">Minimum 6 characters</small>
                 </div>
 

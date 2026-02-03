@@ -8,6 +8,11 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import * as AuthControllers from './src/controllers/AuthControllers.js';
 import { auth, authorizeRole } from './src/middleware/auth.js';
+import {
+    registerValidation,
+    loginValidation,
+    handleValidationErrors,
+} from './src/validators/authValidators.js';
 
 const app = express();
 app.use(morgan('dev'));
@@ -40,13 +45,18 @@ app.use(
   })
 );
 
-//  AUTH ROUTES 
-app.post('/api/auth/register', AuthControllers.register);
-app.post('/api/auth/login', AuthControllers.login);
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "frame-ancestors 'self';"
+  );
+  next();
+});
 
-//  AUTH ROUTES
-app.post('/api/auth/register', AuthControllers.register);
-app.post('/api/auth/login', AuthControllers.login);
+
+// AUTH ROUTES (with express-validator)
+app.post('/api/auth/register', registerValidation, handleValidationErrors, AuthControllers.register);
+app.post('/api/auth/login', loginValidation, handleValidationErrors, AuthControllers.login);
 
 /**
  * @route GET /api/auth/me
