@@ -44,6 +44,9 @@ export const register = async (req, res) => {
             id: user.id,
             role: user.role
         };
+        if (!JWT_SECRET) {
+            return res.status(500).json({ message: 'Server misconfigured: JWT secret missing.' });
+        }
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
         // 6. Respond with token and user info
@@ -63,7 +66,7 @@ export const register = async (req, res) => {
             return res.status(400).json({ message: 'Username or email already taken.' });
         }
         console.error(err.message);
-        res.status(500).send('Server error during registration.');
+        res.status(500).json({ message: 'Server error during registration.' });
     }
 };
 
@@ -96,6 +99,9 @@ export const login = async (req, res) => {
             id: user.id,
             role: user.role
         };
+        if (!JWT_SECRET) {
+            return res.status(500).json({ message: 'Server misconfigured: JWT secret missing.' });
+        }
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
         // 4. Respond with token and user info
@@ -111,7 +117,7 @@ export const login = async (req, res) => {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error during login.');
+        res.status(500).json({ message: 'Server error during login.' });
     }
 };
 
@@ -130,6 +136,6 @@ export const getUserDetails = async (req, res) => {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error retrieving user data.');
+        res.status(500).json({ message: 'Server error retrieving user data.' });
     }
 };

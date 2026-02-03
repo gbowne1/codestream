@@ -82,10 +82,15 @@
             </button>
           </li>
 
-          <li class="nav-item">
-            <a href="/login.html" class="btn btn-sm btn-primary">
+          <li class="nav-item" id="authNavLogin">
+            <a href="/login.html" class="btn btn-sm btn-primary" id="loginLink">
               <i class="fas fa-sign-in-alt me-1"></i>Login
             </a>
+          </li>
+          <li class="nav-item d-none" id="authNavLogout">
+            <button id="logoutBtn" class="btn btn-sm btn-outline-danger" type="button">
+              <i class="fas fa-sign-out-alt me-1"></i>Logout
+            </button>
           </li>
         </ul>
       </nav>

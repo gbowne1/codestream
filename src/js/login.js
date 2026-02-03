@@ -6,7 +6,9 @@
  * - 200: Successful login
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+import { checkAuth } from './auth.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -16,10 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorAlert = document.getElementById('errorAlert');
     const errorMessage = document.getElementById('errorMessage');
 
-    // Check if user is already logged in
-    const token = localStorage.getItem('token');
-    if (token) {
-        // Redirect to home if already logged in
+    // Check if user is already logged in (validate token)
+    const isAuthenticated = await checkAuth();
+    if (isAuthenticated) {
         window.location.href = '/';
         return;
     }
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await response.json();
+            const rawText = await response.text();
+            let data = {};
+            try {
+                data = rawText ? JSON.parse(rawText) : {};
+            } catch (parseError) {
+                data = { message: rawText || 'Unexpected server response.' };
+            }
 
             // Handle different status codes
             if (response.status === 200) {
@@ -127,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } else if (response.status === 500) {
                 // SERVER ERROR
-                showError('Server error. Please try again later.');
+                showError(data.message || 'Server error. Please try again later.');
                 setLoading(false);
 
             } else {

@@ -3,7 +3,9 @@
  * Handles user registration
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+import { checkAuth } from './auth.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
     const registerForm = document.getElementById('registerForm');
     const usernameInput = document.getElementById('username');
     const emailInput = document.getElementById('email');
@@ -14,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageAlert = document.getElementById('messageAlert');
     const messageText = document.getElementById('messageText');
 
-    // Check if user is already logged in
-    const token = localStorage.getItem('token');
-    if (token) {
+    // Check if user is already logged in (validate token)
+    const isAuthenticated = await checkAuth();
+    if (isAuthenticated) {
         window.location.href = '/';
         return;
     }
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/register', {
+            const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username, email, password }),
             });
 
-            const data = await response.json();
+            const rawText = await response.text();
+            let data = {};
+            try {
+                data = rawText ? JSON.parse(rawText) : {};
+            } catch (parseError) {
+                data = { message: rawText || 'Unexpected server response.' };
+            }
 
             if (response.status === 201) {
                 // Success
