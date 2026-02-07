@@ -35,8 +35,12 @@ jobs:
       - name: Lint & Format Check
         run: npm run lint:ci
 
+      - name: Run Tests
+        run: npm run test:run
+
+      - name: Generate Coverage Report
+        run: npm run test:coverage
+        continue-on-error: true
+
       - name: Build Project
         run: npm run build
-
-      # Note: If you add a test runner (like Vitest or Jest) later,
-      # add "npm test" here.
