@@ -33,7 +33,9 @@ body {
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* This block handles the manual theme toggle */
@@ -57,7 +59,9 @@ body.dark.bg-light {
 header {
   background-color: var(--color-header-bg);
   color: var(--color-header-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Override Bootstrap's bg-white class on header in dark mode */
@@ -70,17 +74,52 @@ header .nav-link {
   color: var(
     --color-header-text
   ); /* Ensure nav links get the header text color */
+  color: #000 !important;
+}
+
+header .nav-link:hover,
+header .nav-link:focus {
+  color: #000 !important;
+  opacity: 0.7;
+}
+
+body.dark header .nav-link {
+  color: #eee !important;
+}
+
+body.dark header .nav-link:hover,
+body.dark header .nav-link:focus {
+  color: #eee !important;
+}
+header a {
+  color: #000 !important;
+}
+header a:hover {
+  color: #000 !important;
+}
+body.dark header a {
+  color: #eee !important;
+}
+body.dark header a:hover {
+  color: #eee !important;
 }
 
 /* Footer */
 footer {
   background-color: var(--color-footer-bg);
   color: var(--color-footer-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Headings - ensure they follow the color scheme */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #000 !important;
   transition: color 0.3s ease;
 }
@@ -98,7 +137,9 @@ body.dark h6 {
 .card {
   background-color: var(--color-card-bg);
   color: var(--color-card-text);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .card-text {
@@ -308,3 +349,48 @@ body.dark .badge {
 .close-modal:hover {
   opacity: 0.8;
 }
+
+/* ================================
+   Auth Pages (Login/Register)
+   ================================ */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--color-background);
+}
+
+.auth-card {
+  max-width: 450px;
+  width: 100%;
+}
+
+.auth-card .card {
+  border: none;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.auth-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.25rem rgba(79, 195, 247, 0.25);
+}
+
+.btn-auth {
+  padding: 12px;
+  font-weight: 600;
+}
+

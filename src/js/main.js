@@ -53,6 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'col';
       card.dataset.streamId = stream.id;
 
+      // build tag HTML separately so the template stays clean and ESLint-friendly
+      const tagsHtml = (stream.tags || [])
+        .map(
+          (tag) =>
+            `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
+        )
+        .join('');
+
       card.innerHTML = `
         <div class="card shadow-sm h-100">
           <img src="${stream.img}" class="card-img-top" loading="lazy"
@@ -63,12 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="small text-muted mb-2">
               ${formatViewers(stream.viewers)} viewers
             </p>
-            ${stream.tags
-              .map(
-                (tag) =>
-                  `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
-              )
-              .join('')}
+            ${tagsHtml}
           </div>
         </div>
       `;
@@ -145,7 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const card = e.target.closest('article.col');
     if (card) {
-      const stream = allStreams.find((s) => s.id === Number(card.dataset.streamId));
+      const stream = allStreams.find(
+        (s) => s.id === Number(card.dataset.streamId)
+      );
       if (stream) openStreamDetail(stream);
     }
   });
@@ -190,9 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const escHandler = (e) => {
-       if (e.key === 'Escape') close();
+      if (e.key === 'Escape') close();
     };
-
 
     modal.querySelector('.close-modal').onclick = close;
     modal.querySelector('.stream-detail-overlay').onclick = close;
@@ -204,6 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchStreams() {
     try {
       const res = await fetch('/api/streams');
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status} ${res.statusText}`);
+      }
+
       const data = await res.json();
 
       allStreams = data.map((s) => ({
@@ -213,9 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }));
 
       renderStreams(allStreams);
-    } catch {
+    } catch (err) {
+      console.error('Failed to load streams:', err);
       previewContainer.innerHTML =
-        '<p class="text-danger">Failed to load streams.</p>';
+        '<div class="text-center py-5"><p class="text-danger">Failed to load streams. Please refresh the page.</p></div>';
     }
   }
 

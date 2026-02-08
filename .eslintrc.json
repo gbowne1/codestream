@@ -1,14 +1,46 @@
 {
+  "root": true,
   "env": {
     "browser": true,
-    "es2021": true
+    "node": true,
+    "es2023": true
   },
   "extends": ["eslint:recommended", "prettier"],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 12,
-    "sourceType": "module"
+    "requireConfigFile": false,
+    "ecmaVersion": 2023,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "plugins": ["import"],
   "rules": {
-    "no-console": "warn"
-  }
+    "no-console": "warn",
+    "no-var": "error",
+    "prefer-const": "error",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "semi": ["error", "always"],
+    "import/no-unresolved": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "build/",
+    "coverage/",
+    "public/service-worker.js",
+    "public/manifest.json",
+    "*.min.js"
+  ],
+  "overrides": [
+    {
+      "files": ["*.cjs", "*.mjs", "*.js", "*.jsx"],
+      "parserOptions": {
+        "sourceType": "module"
+      }
+    }
+  ]
 }
