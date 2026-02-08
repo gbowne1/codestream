@@ -23,36 +23,36 @@ describe('Theme Management', () => {
   describe('localStorage operations', () => {
     it('should save theme preference to localStorage', () => {
       localStorage.setItem('theme', 'dark');
-      
+
       expect(localStorage.getItem('theme')).toBe('dark');
     });
 
     it('should retrieve saved theme preference', () => {
       localStorage.setItem('theme', 'light');
       const theme = localStorage.getItem('theme');
-      
+
       expect(theme).toBe('light');
     });
 
     it('should return null for non-existent key', () => {
       const theme = localStorage.getItem('nonExistent');
-      
+
       expect(theme).toBeNull();
     });
 
     it('should overwrite existing theme preference', () => {
       localStorage.setItem('theme', 'dark');
       localStorage.setItem('theme', 'light');
-      
+
       expect(localStorage.getItem('theme')).toBe('light');
     });
 
     it('should clear all stored data', () => {
       localStorage.setItem('theme', 'dark');
       localStorage.setItem('user', 'test');
-      
+
       localStorage.clear();
-      
+
       expect(localStorage.getItem('theme')).toBeNull();
       expect(localStorage.getItem('user')).toBeNull();
     });
@@ -69,7 +69,7 @@ describe('Theme Management', () => {
             }
           },
           remove(className) {
-            this.items = this.items.filter(c => c !== className);
+            this.items = this.items.filter((c) => c !== className);
           },
           contains(className) {
             return this.items.includes(className);

@@ -127,11 +127,13 @@ describe('Utility Functions', () => {
     it('should filter by category', () => {
       const result = getFilteredStreams(mockStreams, { category: 'webdev' });
       expect(result).toHaveLength(2);
-      expect(result.every(s => s.category === 'webdev')).toBe(true);
+      expect(result.every((s) => s.category === 'webdev')).toBe(true);
     });
 
     it('should filter by subCategory', () => {
-      const result = getFilteredStreams(mockStreams, { subCategory: 'frontend' });
+      const result = getFilteredStreams(mockStreams, {
+        subCategory: 'frontend',
+      });
       expect(result).toHaveLength(1);
       expect(result[0].id).toBe(1);
     });

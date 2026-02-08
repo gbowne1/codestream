@@ -98,10 +98,10 @@ Cookies and Cache Storage. Make secure usage of all of these
 
 This project uses **Vitest** as its testing framework. Before submitting a pull request, please ensure:
 
--   **All tests pass**: Run `npm test` or `npm run test:run` to execute the test suite
--   **Write tests for new features**: Add unit tests for any new functionality
--   **Maintain coverage**: Aim to maintain or improve code coverage
--   **Follow test patterns**: See existing tests in `tests/unit/` for examples
+- **All tests pass**: Run `npm test` or `npm run test:run` to execute the test suite
+- **Write tests for new features**: Add unit tests for any new functionality
+- **Maintain coverage**: Aim to maintain or improve code coverage
+- **Follow test patterns**: See existing tests in `tests/unit/` for examples
 
 ### Running Tests
 
@@ -121,10 +121,10 @@ npm run test:coverage
 
 ### Test Structure
 
--   `tests/unit/backend/` - Backend unit tests (Node.js environment)
--   `tests/unit/frontend/` - Frontend unit tests (jsdom environment)
--   `tests/integration/` - Integration tests (future)
--   `tests/helpers/` - Test utilities and mocks
+- `tests/unit/backend/` - Backend unit tests (Node.js environment)
+- `tests/unit/frontend/` - Frontend unit tests (jsdom environment)
+- `tests/integration/` - Integration tests (future)
+- `tests/helpers/` - Test utilities and mocks
 
 ### Writing Tests
 
@@ -134,16 +134,16 @@ Follow the AAA (Arrange, Act, Assert) pattern:
 it('should do something specific', () => {
   // Arrange - Set up test data
   const input = 'test';
-  
+
   // Act - Execute the function
   const result = myFunction(input);
-  
+
   // Assert - Verify the result
   expect(result).toBe('expected');
 });
 ```
 
-For more details, see `tests/unit/` for working examples. 
+For more details, see `tests/unit/` for working examples.
 
 ## Pull Request
 

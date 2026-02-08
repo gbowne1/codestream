@@ -7,7 +7,7 @@ import { vi } from 'vitest';
  */
 export function mockRequest(options = {}) {
   const headers = options.headers || {};
-  
+
   return {
     body: options.body || {},
     header: vi.fn((name) => headers[name]),

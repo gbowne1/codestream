@@ -17,6 +17,9 @@ export default defineConfig({
       ],
     },
     setupFiles: ['./tests/setup.js'],
-    include: ['tests/unit/backend/**/*.test.js', 'tests/integration/**/*.test.js'],
+    include: [
+      'tests/unit/backend/**/*.test.js',
+      'tests/integration/**/*.test.js',
+    ],
   },
 });

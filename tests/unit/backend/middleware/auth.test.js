@@ -1,6 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import jwt from 'jsonwebtoken';
-import { mockRequest, mockResponse, mockNext } from '../../../helpers/mockExpress.js';
+import {
+  mockRequest,
+  mockResponse,
+  mockNext,
+} from '../../../helpers/mockExpress.js';
 import { auth, authorizeRole } from '../../../../src/middleware/auth.js';
 
 describe('Auth Middleware', () => {
@@ -18,8 +22,8 @@ describe('Auth Middleware', () => {
       const token = jwt.sign({ id: '123', role: 'user' }, TEST_SECRET);
       req = mockRequest({
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       res = mockResponse();
       next = mockNext();
@@ -29,7 +33,7 @@ describe('Auth Middleware', () => {
       // Check if error path was taken
       expect(res.status).not.toHaveBeenCalled();
       expect(res.json).not.toHaveBeenCalled();
-      
+
       // Check success path
       expect(next).toHaveBeenCalled();
       expect(req.user).toBeDefined();
