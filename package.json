@@ -7,8 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint .",
+    "lint": "eslint \"**/*.{js,jsx,mjs,cjs}\"",
+    "lint:fix": "eslint \"**/*.{js,jsx,mjs,cjs}\" --fix",
     "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "lint:ci": "npm run lint && npm run check:format",
     "api": "node server.js"
   },
   "keywords": [
@@ -33,8 +36,11 @@
     "morgan": "^1.10.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.28.6",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.2.5",
     "vite": "^5.2.11"
   }
