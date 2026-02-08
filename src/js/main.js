@@ -73,6 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'col';
       card.dataset.streamId = stream.id;
 
+      // build tag HTML separately so the template stays clean and ESLint-friendly
+      const tagsHtml = (stream.tags || [])
+        .map(
+          (tag) =>
+            `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
+        )
+        .join('');
+
       card.innerHTML = `
         <div class="card shadow-sm h-100">
           <img src="${stream.img}" class="card-img-top" loading="lazy"
@@ -83,12 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="small text-muted mb-2">
               ${formatViewers(stream.viewers)} viewers
             </p>
-            ${stream.tags
-          .map(
-            (tag) =>
-              `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
-          )
-          .join('')}
+            ${tagsHtml}
           </div>
         </div>
       `;
@@ -132,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filters = {
       category: categoryFilter?.value || '',
       subCategory: subCategoryFilter?.value || '',
-      mature: false
+      mature: false,
     };
 
     const filtered = getFilteredStreams(allStreams, filters);
@@ -165,7 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const card = e.target.closest('article.col');
     if (card) {
-      const stream = allStreams.find((s) => s.id === Number(card.dataset.streamId));
+      const stream = allStreams.find(
+        (s) => s.id === Number(card.dataset.streamId)
+      );
       if (stream) openStreamDetail(stream);
     }
   });
@@ -213,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Escape') close();
     };
 
-
     modal.querySelector('.close-modal').onclick = close;
     modal.querySelector('.stream-detail-overlay').onclick = close;
     document.addEventListener('keydown', escHandler);
@@ -234,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
       allStreams = data.map((s) => ({
         ...s,
         img: s.thumbnail || s.img,
-        tags: s.tags || [s.category]
+        tags: s.tags || [s.category],
       }));
 
       renderStreams(allStreams);
@@ -321,8 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const applyTheme = () => {
     document.body.classList.toggle('dark', isDark);
-    themeToggle.querySelector('i').className =
-      isDark ? 'fas fa-sun' : 'fas fa-moon';
+    themeToggle.querySelector('i').className = isDark
+      ? 'fas fa-sun'
+      : 'fas fa-moon';
   };
 
   applyTheme();

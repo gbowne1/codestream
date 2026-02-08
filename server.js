@@ -25,10 +25,19 @@ const __dirname = dirname(__filename);
 
 // Enable CORS so your frontend can communicate with this API
 // Middleware setup (must be before routes)
-app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS 
+app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS
 app.use(express.json());
 
 // DATABASE CONNECTION
+const connectDB = async () => {
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('🟢 MongoDB connected successfully.');
+  } catch (err) {
+    console.error('🔴 MongoDB connection error:', err);
+  }
+};
+connectDB();
 if (MONGODB_URI) {
     mongoose.connect(MONGODB_URI)
         .then(() => console.log(' MongoDB connected successfully.'))
@@ -95,6 +104,24 @@ app.get('/', (req, res) => {
  * Reads the mock data from streams.json and returns it as JSON.
  */
 app.get('/api/streams', (req, res) => {
+  const dataPath = join(__dirname, 'streams.json');
+
+  fs.readFile(dataPath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading streams.json:', err);
+      return res
+        .status(500)
+        .json({ error: 'Internal Server Error: Could not read data file.' });
+    }
+    try {
+      res.json(JSON.parse(data));
+    } catch (parseErr) {
+      console.error('Error parsing JSON:', parseErr);
+      res
+        .status(500)
+        .json({ error: 'Internal Server Error: Invalid JSON format.' });
+    }
+  });
     const dataPath = join(__dirname, 'streams.json');
 
     fs.readFile(dataPath, 'utf8', (err, data) => {
@@ -113,12 +140,13 @@ app.get('/api/streams', (req, res) => {
 
 // 404 Not Found handler (must be after all routes)
 app.use((req, res) => {
-    res.status(404).json({
-        error: "Route not found"
-    });
+  res.status(404).json({
+    error: 'Route not found',
+  });
 });
 
 app.listen(PORT, () => {
-    console.log(`\nServer successfully started!`);
-    console.log(`Home: http://localhost:${PORT}`);
+  console.log(`\n✅ Server successfully started!`);
+  console.log('\n✅ Server successfully started!');
+  console.log(`🏠 Home: http://localhost:${PORT}`);
 });

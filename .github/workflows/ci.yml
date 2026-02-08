@@ -2,13 +2,13 @@ name: DevStream CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -32,14 +32,11 @@ jobs:
         # If package-lock.json is in .gitignore, change this to: npm install
         run: npm ci
 
-      - name: Lint Code
-        run: npm run lint
-
-      - name: Check Formatting
-        run: npx prettier --check .
+      - name: Lint & Format Check
+        run: npm run lint:ci
 
       - name: Build Project
         run: npm run build
 
-      # Note: If you add a test runner (like Vitest or Jest) later, 
+      # Note: If you add a test runner (like Vitest or Jest) later,
       # add "npm test" here.
