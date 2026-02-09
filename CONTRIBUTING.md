@@ -94,6 +94,57 @@ focus styling, contrast and keyboard accesibility.
 Lastly, the browser gives us things like localStorage, IndexedDB, Session Storage,
 Cookies and Cache Storage. Make secure usage of all of these
 
+## Testing
+
+This project uses **Vitest** as its testing framework. Before submitting a pull request, please ensure:
+
+- **All tests pass**: Run `npm test` or `npm run test:run` to execute the test suite
+- **Write tests for new features**: Add unit tests for any new functionality
+- **Maintain coverage**: Aim to maintain or improve code coverage
+- **Follow test patterns**: See existing tests in `tests/unit/` for examples
+
+### Running Tests
+
+```bash
+# Run tests in watch mode (recommended during development)
+npm test
+
+# Run tests once
+npm run test:run
+
+# Run tests with UI
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+```
+
+### Test Structure
+
+- `tests/unit/backend/` - Backend unit tests (Node.js environment)
+- `tests/unit/frontend/` - Frontend unit tests (jsdom environment)
+- `tests/integration/` - Integration tests (future)
+- `tests/helpers/` - Test utilities and mocks
+
+### Writing Tests
+
+Follow the AAA (Arrange, Act, Assert) pattern:
+
+```javascript
+it('should do something specific', () => {
+  // Arrange - Set up test data
+  const input = 'test';
+
+  // Act - Execute the function
+  const result = myFunction(input);
+
+  // Assert - Verify the result
+  expect(result).toBe('expected');
+});
+```
+
+For more details, see `tests/unit/` for working examples.
+
 ## Pull Request
 
 Once you are finished working on an issue move to create a Pull Request (PR).
@@ -114,7 +165,7 @@ Please provide a short video, copy of log(s), passing tests,
 screenshots of working changes. This helps with reviewers knowing
 what to expect with your changes and contributions.
 
-If you manage to contribute a minimum of 3 accepted and merged PRs, you can request to be a contributor/maintainer/collsborator.
+If you manage to contribute a minimum of 3 accepted and merged PRs, you can request to be a contributor/maintainer/collaborator.
 
 ## Style
 
