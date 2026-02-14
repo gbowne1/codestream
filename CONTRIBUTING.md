@@ -3,8 +3,8 @@
 This project welcomes contributors to help improve its codebase by identifying shortcomings
 in the project, highlighting bugs, and issues in the documentation.
 
-This is not a 'for hire' project. It's open source, so contribution to this project 
-is based on developer community improvements. This streaming platform was created specifically 
+This is not a 'for hire' project. It's open source, so contribution to this project
+is based on developer community improvements. This streaming platform was created specifically
 by community developers for developers, hobbyists alike.
 
 This is a PWA.
@@ -15,25 +15,25 @@ Anyone with basic programming skills down contribute immensely to this project.
 
 Areas requiring contribution includes:
 
--   **Error checks**: Identify any mispellings or errors in documentation
+- **Error checks**: Identify any mispellings or errors in documentation
 
--   **Documentation**: Possess good documentation skills: Good spelling, punctuation, knowledge of Markdown and grammar checker tool, and you believe you can help elevate this projects' documentation even better?
+- **Documentation**: Possess good documentation skills: Good spelling, punctuation, knowledge of Markdown and grammar checker tool, and you believe you can help elevate this projects' documentation even better?
 
--   **Code contribution**: Identify a bug in this app or thought of a new feature that could plunge this app to a new dimension.
+- **Code contribution**: Identify a bug in this app or thought of a new feature that could plunge this app to a new dimension.
 
--   **Tests**: Contribute CI, CD, Docker, Unit tests, E2E tests, Integration tests to 
-help us ensure PRs don't introduce breaking changes, etc.
+- **Tests**: Contribute CI, CD, Docker, Unit tests, E2E tests, Integration tests to
+  help us ensure PRs don't introduce breaking changes, etc.
 
--   **Browser Testing**: Ideally this should work with no or minimal browser console errors, warnings, alerts.
-If you encounter any specific warnings, errors, alerts.
-Ideally this should work across mobile, desktop and many different devices Windows, Mac, Linux and different processor architectures as
-well as different browsers.
+- **Browser Testing**: Ideally this should work with no or minimal browser console errors, warnings, alerts.
+  If you encounter any specific warnings, errors, alerts.
+  Ideally this should work across mobile, desktop and many different devices Windows, Mac, Linux and different processor architectures as
+  well as different browsers.
 
 Please review your browser's console during development.
 
 'console.log' everything necessary to ensure everything is working.
 
-Add error messages where necessary 
+Add error messages where necessary
 
 ## How to contribute
 
@@ -43,7 +43,7 @@ These next subheadings will get you started on making your contributions to this
 
 If you are not sure what to work on, review the issues list first. There are also TODO's listed in the included [TODO.md](./TODO.md) file.
 
-Please '//TODO' mark incomplete areas and add them to the TODO.md file. 
+Please '//TODO' mark incomplete areas and add them to the TODO.md file.
 
 @gbowne1 and other project maintainers will assign users to issues on a first come, first serve basis. If you would like to work on an issue, feel free to indicate by tagging the mentioned persons.
 
@@ -60,9 +60,9 @@ If none has been created, Click on the green [New Issue] button.
 
 Describe your issue as well as you can:
 
--   Include code snippits where the issue lies.
--   Include screenshots (optional).
--   Include a short video (optional).
+- Include code snippits where the issue lies.
+- Include screenshots (optional).
+- Include a short video (optional).
 
 If the issue appears to be a browser, operating system, device specific issue, let us know what those are.
 
@@ -78,11 +78,11 @@ tool and editor/IDE agnostic so you can use whatever editor or IDE or you like.
 
 The [DEVSETUP](/docs/DEVSETUP.md) file contains instructions for developers on how to:
 
--   Clone or Fork the project,
--   Set up the project in their IDE or editor,
--   Set up their environment to work in the project, including any environment variables, yarn/npm/pnpm package(s), editor extensions or plugins needed,
--   Setting up the connection to the database,
--   Setting up the local development database, MongoDB.
+- Clone or Fork the project,
+- Set up the project in their IDE or editor,
+- Set up their environment to work in the project, including any environment variables, yarn/npm/pnpm package(s), editor extensions or plugins needed,
+- Setting up the connection to the database,
+- Setting up the local development database, MongoDB.
 
 ## Prerequisites to use Database for programmers
 
@@ -92,7 +92,58 @@ Also, use accessibility (A11y) with themes and styles paying attention to
 focus styling, contrast and keyboard accesibility.
 
 Lastly, the browser gives us things like localStorage, IndexedDB, Session Storage,
-Cookies and Cache Storage. Make secure usage of all of these 
+Cookies and Cache Storage. Make secure usage of all of these
+
+## Testing
+
+This project uses **Vitest** as its testing framework. Before submitting a pull request, please ensure:
+
+- **All tests pass**: Run `npm test` or `npm run test:run` to execute the test suite
+- **Write tests for new features**: Add unit tests for any new functionality
+- **Maintain coverage**: Aim to maintain or improve code coverage
+- **Follow test patterns**: See existing tests in `tests/unit/` for examples
+
+### Running Tests
+
+```bash
+# Run tests in watch mode (recommended during development)
+npm test
+
+# Run tests once
+npm run test:run
+
+# Run tests with UI
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+```
+
+### Test Structure
+
+- `tests/unit/backend/` - Backend unit tests (Node.js environment)
+- `tests/unit/frontend/` - Frontend unit tests (jsdom environment)
+- `tests/integration/` - Integration tests (future)
+- `tests/helpers/` - Test utilities and mocks
+
+### Writing Tests
+
+Follow the AAA (Arrange, Act, Assert) pattern:
+
+```javascript
+it('should do something specific', () => {
+  // Arrange - Set up test data
+  const input = 'test';
+
+  // Act - Execute the function
+  const result = myFunction(input);
+
+  // Assert - Verify the result
+  expect(result).toBe('expected');
+});
+```
+
+For more details, see `tests/unit/` for working examples.
 
 ## Pull Request
 
@@ -104,17 +155,17 @@ Assignees, Reviewers, Labels, Projects, Milestone(s) and Development before you 
 Also, write a brief description of what you fixed. Keep in mind that Blank issues and PR's
 without a description of the changes you made may not get merged.
 
--   Link an issue to Development that the PR will close
--   Make sure that you tag a reviewer i.e. @gbowne1
--   Pick appropriate labels from Labels
--   Make sure you are the assignee to the PR.
--   Milestone, choose Frontend or Backend (more may come later on)
+- Link an issue to Development that the PR will close
+- Make sure that you tag a reviewer i.e. @gbowne1
+- Pick appropriate labels from Labels
+- Make sure you are the assignee to the PR.
+- Milestone, choose Frontend or Backend (more may come later on)
 
 Please provide a short video, copy of log(s), passing tests,
-screenshots of working changes. This helps with reviewers knowing 
+screenshots of working changes. This helps with reviewers knowing
 what to expect with your changes and contributions.
 
-If you manage to contribute a minimum of 3 accepted and merged PRs, you can request to be a contributor/maintainer/collsborator.
+If you manage to contribute a minimum of 3 accepted and merged PRs, you can request to be a contributor/maintainer/collaborator.
 
 ## Style
 
@@ -137,7 +188,7 @@ working with our code base.
 
 ## Tech Stack
 
-This project was bootstrapped with these libraries, modules, packages 
+This project was bootstrapped with these libraries, modules, packages
 
 All core components, modules, etc. are built with JavaScript.
 
@@ -145,11 +196,11 @@ All core components, modules, etc. are built with JavaScript.
 
 Our branches follow GitFlow / GitHub Flow as a general rule.
 
--   [ main ] main working branch
--   [ master ] Permanent // Archive branch
--   [ test ] untested code
--   Feature Branch # of feature - {feature}
--   [bugfix - { fixed bug }]
--   [hotfix - { fix }]
+- [ main ] main working branch
+- [ master ] Permanent // Archive branch
+- [ test ] untested code
+- Feature Branch # of feature - {feature}
+- [bugfix - { fixed bug }]
+- [hotfix - { fix }]
 
 Use a test branch to commit/push code that you believe should work but is not completely tested.
