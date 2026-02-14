@@ -32,7 +32,6 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
 });
 
 // Hide the password and version key when converting to JSON
