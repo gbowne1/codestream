@@ -73,12 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="small text-muted mb-2">
               ${formatViewers(stream.viewers)} viewers
             </p>
-            ${stream.tags
-              .map(
-                (tag) =>
-                  `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
-              )
-              .join('')}
             ${tagsHtml}
           </div>
         </div>
