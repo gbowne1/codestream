@@ -30,7 +30,14 @@ jobs:
       - name: Install Dependencies
         # Note: npm ci requires package-lock.json to be committed.
         # If package-lock.json is in .gitignore, change this to: npm install
-        run: npm ci
+        run: |
+          echo "Listing files in current directory:"
+          ls -la
+          echo "Node version:"
+          node -v
+          echo "NPM version:"
+          npm -v
+          npm ci
 
       - name: Lint & Format Check
         run: npm run lint:ci
