@@ -9,10 +9,14 @@
     "preview": "vite preview",
     "lint": "eslint \"**/*.{js,jsx,mjs,cjs}\"",
     "lint:fix": "eslint \"**/*.{js,jsx,mjs,cjs}\" --fix",
+    "lint:ci": "npm run lint && npm run check:format",
     "format": "prettier --write .",
     "check:format": "prettier --check .",
-    "lint:ci": "npm run lint && npm run check:format",
-    "api": "node server.js"
+    "api": "node server.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "pwa",
@@ -32,6 +36,13 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-validator": "^7.3.1",
+    "flv.js": "^1.6.2",
+    "helmet": "^8.1.0",
+    "mongoose": "^9.1.5",
+    "node-media-server": "^4.2.4",
+    "obs-websocket-js": "^5.0.7",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5",
     "morgan": "^1.10.1"
@@ -42,7 +53,14 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.5",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "happy-dom": "^20.5.0",
+    "jsdom": "^28.0.0",
+    "mongodb-memory-server": "^11.0.1",
     "prettier": "^3.2.5",
-    "vite": "^5.2.11"
+    "supertest": "^7.2.2",
+    "vite": "^5.2.11",
+    "vitest": "^4.0.18"
   }
 }
