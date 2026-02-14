@@ -1,116 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Go Live | DevStream</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/src/css/style.css" />
     <style>
-        .preview-container {
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            aspect-ratio: 16/9;
-        }
+      .preview-container {
+        background: #000;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 16/9;
+      }
 
-        .preview-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+      .preview-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
 
-        .source-btn {
-            min-width: 120px;
-        }
+      .source-btn {
+        min-width: 120px;
+      }
     </style>
-</head>
+  </head>
 
-<body class="bg-light">
-
+  <body class="bg-light">
     <!-- Header -->
     <header class="sticky-top bg-white shadow-sm">
-        <div class="container d-flex justify-content-between align-items-center py-3">
-            <a href="/" class="text-decoration-none text-dark">
-                <h1 class="h4 mb-0">DevStream</h1>
-            </a>
-            <nav aria-label="Main navigation">
-                <ul class="nav align-items-center gap-3">
-                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="/go-live.html" class="nav-link active text-danger fw-bold"><i
-                                class="fas fa-video me-1"></i>Go Live</a></li>
-                    <li class="nav-item"><a href="/watch.html" class="nav-link"><i class="fas fa-eye me-1"></i>Watch</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+      <div
+        class="container d-flex justify-content-between align-items-center py-3"
+      >
+        <a href="/" class="text-decoration-none text-dark">
+          <h1 class="h4 mb-0">DevStream</h1>
+        </a>
+        <nav aria-label="Main navigation">
+          <ul class="nav align-items-center gap-3">
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item">
+              <a
+                href="/go-live.html"
+                class="nav-link active text-danger fw-bold"
+                ><i class="fas fa-video me-1"></i>Go Live</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="/watch.html" class="nav-link"
+                ><i class="fas fa-eye me-1"></i>Watch</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <main class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h2 class="h5 mb-0"><i class="fas fa-video me-2"></i>Go Live Dashboard</h2>
-                    </div>
-                    <div class="card-body">
-
-                        <!-- Connection Status -->
-                        <div id="connectionStatus" class="alert alert-secondary d-flex align-items-center" role="alert">
-                            <i class="fas fa-circle me-2"></i>
-                            <span>Ready to stream</span>
-                        </div>
-
-                        <!-- Video Preview -->
-                        <div class="preview-container mb-4">
-                            <video id="localPreview" autoplay muted playsinline></video>
-                        </div>
-
-                        <!-- Source Selection -->
-                        <div class="d-flex gap-2 mb-4 flex-wrap">
-                            <button id="shareScreenBtn" class="btn btn-outline-primary source-btn">
-                                <i class="fas fa-desktop me-1"></i> Share Screen
-                            </button>
-                            <button id="useCameraBtn" class="btn btn-outline-secondary source-btn">
-                                <i class="fas fa-camera me-1"></i> Use Camera
-                            </button>
-                        </div>
-
-                        <!-- Stream Name -->
-                        <div class="mb-4">
-                            <label for="streamName" class="form-label">Stream Name</label>
-                            <input type="text" id="streamName" class="form-control"
-                                placeholder="Enter a unique stream name" value="">
-                        </div>
-
-                        <hr>
-
-                        <!-- Stream Controls -->
-                        <div class="d-grid gap-2">
-                            <button id="startStreamBtn" class="btn btn-success btn-lg" disabled>
-                                <i class="fas fa-signal me-2"></i>Start Streaming
-                            </button>
-                            <button id="stopStreamBtn" class="btn btn-danger btn-lg d-none">
-                                <i class="fas fa-stop me-2"></i>Stop Streaming
-                            </button>
-                        </div>
-
-                        <div class="mt-3 text-center text-muted">
-                            <small id="streamStats">Select a video source to begin</small>
-                        </div>
-
-                    </div>
-                </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h2 class="h5 mb-0">
+                <i class="fas fa-video me-2"></i>Go Live Dashboard
+              </h2>
             </div>
+            <div class="card-body">
+              <!-- Connection Status -->
+              <div
+                id="connectionStatus"
+                class="alert alert-secondary d-flex align-items-center"
+                role="alert"
+              >
+                <i class="fas fa-circle me-2"></i>
+                <span>Ready to stream</span>
+              </div>
+
+              <!-- Video Preview -->
+              <div class="preview-container mb-4">
+                <video id="localPreview" autoplay muted playsinline></video>
+              </div>
+
+              <!-- Source Selection -->
+              <div class="d-flex gap-2 mb-4 flex-wrap">
+                <button
+                  id="shareScreenBtn"
+                  class="btn btn-outline-primary source-btn"
+                >
+                  <i class="fas fa-desktop me-1"></i> Share Screen
+                </button>
+                <button
+                  id="useCameraBtn"
+                  class="btn btn-outline-secondary source-btn"
+                >
+                  <i class="fas fa-camera me-1"></i> Use Camera
+                </button>
+              </div>
+
+              <!-- Stream Name -->
+              <div class="mb-4">
+                <label for="streamName" class="form-label">Stream Name</label>
+                <input
+                  type="text"
+                  id="streamName"
+                  class="form-control"
+                  placeholder="Enter a unique stream name"
+                  value=""
+                />
+              </div>
+
+              <hr />
+
+              <!-- Stream Controls -->
+              <div class="d-grid gap-2">
+                <button
+                  id="startStreamBtn"
+                  class="btn btn-success btn-lg"
+                  disabled
+                >
+                  <i class="fas fa-signal me-2"></i>Start Streaming
+                </button>
+                <button id="stopStreamBtn" class="btn btn-danger btn-lg d-none">
+                  <i class="fas fa-stop me-2"></i>Stop Streaming
+                </button>
+              </div>
+
+              <div class="mt-3 text-center text-muted">
+                <small id="streamStats">Select a video source to begin</small>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="/src/js/go-live.js"></script>
-</body>
-
+  </body>
 </html>
