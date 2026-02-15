@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       card.innerHTML = `
         <div class="card shadow-sm h-100">
+        
           <img src="${stream.img}" class="card-img-top" loading="lazy"
             alt="Stream preview for ${stream.title}" />
           <div class="card-body">
@@ -73,12 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="small text-muted mb-2">
               ${formatViewers(stream.viewers)} viewers
             </p>
-            ${stream.tags
-              .map(
-                (tag) =>
-                  `<span class="badge bg-primary tag-badge" role="button" tabindex="0">${tag}</span>`
-              )
-              .join('')}
             ${tagsHtml}
           </div>
         </div>

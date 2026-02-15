@@ -52,14 +52,9 @@ app.post('/api/auth/register', AuthControllers.register);
 app.post('/api/auth/login', AuthControllers.login);
 app.get('/api/auth/me', auth, AuthControllers.getUserDetails);
 
-app.get(
-  '/api/admin/dashboard',
-  auth,
-  authorizeRole(['admin']),
-  (req, res) => {
-    res.json({ message: `Access granted, Admin ID: ${req.user.id}` });
-  }
-);
+app.get('/api/admin/dashboard', auth, authorizeRole(['admin']), (req, res) => {
+  res.json({ message: `Access granted, Admin ID: ${req.user.id}` });
+});
 
 /* ================== STREAMS ROUTE ================== */
 
