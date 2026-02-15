@@ -263,10 +263,120 @@ body.dark .badge {
   }
 }
 
-/* Responsiveness */
+/* ================================
+   Responsive Breakpoints
+   Based on screensizemap.com high popularity data
+   ================================ */
+
+/* Phone: 360px width & any height */
 @media (max-width: 360px) {
   .stream-preview {
     grid-template-columns: 1fr;
+  }
+  
+  /* Additional phone-specific styles */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  header .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  #streamGrid {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+}
+
+/* Tablet sizes (based on screensizemap.com high popularity) */
+/* Small tablets: 601px - 800px */
+@media (min-width: 601px) and (max-width: 800px) {
+  #streamGrid > .col {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+  
+  .stream-detail-content {
+    max-width: 90%;
+  }
+}
+
+/* Large tablets: 801px - 1024px */
+@media (min-width: 801px) and (max-width: 1024px) {
+  #streamGrid > .col {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+  
+  .container {
+    max-width: 95%;
+  }
+}
+
+/* Laptops: 1360px - 1366px */
+@media (min-width: 1360px) and (max-width: 1366px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  #streamGrid > .col {
+    flex: 0 0 auto;
+    width: 33.333333%;
+  }
+  
+  .stream-detail-content {
+    max-width: 600px;
+  }
+}
+
+/* Bigger Laptops: 1586px */
+@media (min-width: 1586px) and (max-width: 1919px) {
+  .container {
+    max-width: 1560px;
+  }
+  
+  #streamGrid > .col {
+    flex: 0 0 auto;
+    width: 25%;
+  }
+  
+  .stream-detail-content {
+    max-width: 700px;
+  }
+}
+
+/* Desktop: 1920x1080 */
+@media (min-width: 1920px) and (max-width: 1979px) {
+  .container {
+    max-width: 1800px;
+  }
+  
+  #streamGrid > .col {
+    flex: 0 0 auto;
+    width: 25%;
+  }
+  
+  .stream-detail-content {
+    max-width: 800px;
+  }
+}
+
+/* Desktop: 1980x1200 */
+@media (min-width: 1980px) {
+  .container {
+    max-width: 1900px;
+  }
+  
+  #streamGrid > .col {
+    flex: 0 0 auto;
+    width: 20%;
+  }
+  
+  .stream-detail-content {
+    max-width: 900px;
   }
 }
 
