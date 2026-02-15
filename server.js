@@ -8,6 +8,11 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import * as AuthControllers from './src/controllers/AuthControllers.js';
 import { auth, authorizeRole } from './src/middleware/auth.js';
+import {
+    registerValidation,
+    loginValidation,
+    handleValidationErrors,
+} from './src/validators/authValidators.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
@@ -76,6 +81,24 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "frame-ancestors 'self';"
+  );
+  next();
+});
+
+
+// AUTH ROUTES (with express-validator)
+app.post('/api/auth/register', registerValidation, handleValidationErrors, AuthControllers.register);
+app.post('/api/auth/login', loginValidation, handleValidationErrors, AuthControllers.login);
+
+/**
+ * @route GET /api/auth/me
+ * @desc Gets the currently logged-in user's details (eg: username, role).
+ * This endpoint demonstrates basic 'auth' middleware protection.
+ */
 app.use(express.json());
 
 // DATABASE CONNECTION

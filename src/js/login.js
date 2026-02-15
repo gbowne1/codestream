@@ -6,6 +6,23 @@
  * - 200: Successful login
  */
 
+import { checkAuth } from './auth.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Check if user is already logged in (validate token)
+    const isAuthenticated = await checkAuth();
+    if (isAuthenticated) {
+        window.location.href = '/';
+        return;
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
@@ -99,6 +116,75 @@ document.addEventListener('DOMContentLoaded', () => {
         // Store token in localStorage
         localStorage.setItem('token', data.token);
 
+        setLoading(true);
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const rawText = await response.text();
+            let data = {};
+            try {
+                data = rawText ? JSON.parse(rawText) : {};
+            } catch (parseError) {
+                data = { message: rawText || 'Unexpected server response.' };
+            }
+
+            // Handle different status codes
+            if (response.status === 200) {
+                // SUCCESS - Login successful
+                console.log('Login successful:', data);
+
+                // Store token in localStorage
+                localStorage.setItem('token', data.token);
+
+                // Store user info (optional)
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                }
+
+                // Show success message briefly
+                errorAlert.classList.remove('alert-danger');
+                errorAlert.classList.add('alert-success');
+                errorMessage.innerHTML = '<i class="fas fa-check-circle me-2"></i>Login successful! Redirecting...';
+                errorAlert.classList.remove('d-none');
+
+                // Redirect to home page after short delay
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+
+            } else if (response.status === 400) {
+                // BAD REQUEST - Missing or invalid fields
+                showError(data.message || 'Please fill out all fields.');
+                setLoading(false);
+
+            } else if (response.status === 401) {
+                // UNAUTHORIZED - Invalid credentials
+                showError(data.message || 'Invalid email or password.');
+                setLoading(false);
+
+            } else if (response.status === 500) {
+                // SERVER ERROR
+                showError(data.message || 'Server error. Please try again later.');
+                setLoading(false);
+
+            } else {
+                // OTHER ERRORS
+                showError(data.message || 'An unexpected error occurred.');
+                setLoading(false);
+            }
+
+        } catch (error) {
+            // Network error or other fetch errors
+            console.error('Login error:', error);
+            showError('Unable to connect to server. Please check your connection.');
+            setLoading(false);
         // Store user info (optional)
         if (data.user) {
           localStorage.setItem('user', JSON.stringify(data.user));

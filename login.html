@@ -17,6 +17,279 @@
       object-src 'none';
       base-uri 'self';
       frame-ancestors 'none';
+  " />
+
+  <title>Login | DevStream</title>
+  <meta name="description" content="Login to DevStream" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/css/style.css" />
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    body.dark {
+      background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-header .brand i {
+      font-size: 2.5rem;
+    }
+
+    .login-header p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 2.5rem;
+    }
+
+    body.dark .login-card {
+      background: #1e1e2e;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .login-card h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1a1a2e;
+    }
+
+    body.dark .login-card h2 {
+      color: #fff;
+    }
+
+    .login-card .subtitle {
+      color: #6b7280;
+      margin-bottom: 2rem;
+    }
+
+    body.dark .login-card .subtitle {
+      color: #9ca3af;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    body.dark .form-label {
+      color: #d1d5db;
+    }
+
+    .form-control {
+      padding: 0.875rem 1rem;
+      border: 2px solid #e5e7eb;
+      color: #9ca3af;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .custom-input {
+      color: #111827;
+      /* text color when user types */
+    }
+
+    /* Placeholder color */
+    .custom-input::placeholder {
+      color: #9ca3af;
+      /* placeholder color */
+      opacity: 1;
+      /* important for Firefox */
+    }
+
+    body.dark .form-control {
+      background: #2d2d3d;
+      border-color: #3d3d4d;
+      color: #fff;
+    }
+
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    body.dark .form-control:focus {
+      border-color: #667eea;
+      background: #2d2d3d;
+    }
+
+    .btn-login {
+      padding: 0.875rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    body.dark .login-footer {
+      border-top-color: #3d3d4d;
+    }
+
+    .login-footer p {
+      color: #6b7280;
+      margin: 0;
+    }
+
+    body.dark .login-footer p {
+      color: #9ca3af;
+    }
+
+    .login-footer a {
+      color: #667eea;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      transition: gap 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 0.75rem;
+      color: #fff;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .alert {
+      border-radius: 10px;
+      border: none;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    body.dark .alert-danger {
+      background: #7f1d1d;
+      color: #fecaca;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    body.dark .alert-success {
+      background: #064e3b;
+      color: #a7f3d0;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="login-wrapper">
+    <a href="/" class="back-link">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back to Home</span>
+    </a>
+
+    <div class="login-header">
+      <div class="brand">
+        <i class="fas fa-stream"></i>
+        <span>DevStream</span>
   "
     />
 
@@ -301,6 +574,22 @@
         <h2>Sign In</h2>
         <p class="subtitle">Enter your credentials to access your account</p>
 
+      <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span id="errorMessage"></span>
+      </div>
+
+      <form id="loginForm">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control custom-input" id="email" placeholder="you@example.com" required
+            autocomplete="email" />
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control custom-input" id="password" placeholder="Enter your password" required
+            autocomplete="current-password" />
         <div id="errorAlert" class="alert alert-danger d-none" role="alert">
           <i class="fas fa-exclamation-circle me-2"></i>
           <span id="errorMessage"></span>
