@@ -1,3 +1,4 @@
+import { checkAuth, clearAuth } from './auth.js';
 // WebRTC-based streaming - no external player library needed
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearSearch = document.getElementById('clearSearch');
   const previewContainer = document.getElementById('streamGrid');
   const popularTagsContainer = document.getElementById('popularTags');
+  const loginNav = document.getElementById('authNavLogin');
+  const logoutNav = document.getElementById('authNavLogout');
+  const logoutBtn = document.getElementById('logoutBtn');
 
   // 🔹 FILTER UI (future / optional)
   const categoryFilter = document.getElementById('categoryFilter');
@@ -18,6 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
   let allStreams = [];
 
   /* ================= HELPERS ================= */
+
+  const updateAuthNav = async () => {
+    const isAuthenticated = await checkAuth();
+    if (loginNav && logoutNav) {
+      loginNav.classList.toggle('d-none', isAuthenticated);
+      logoutNav.classList.toggle('d-none', !isAuthenticated);
+    }
+  };
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      clearAuth();
+      window.location.href = '/login.html';
+    });
+  }
 
   function formatViewers(count) {
     if (count >= 1000) return (count / 1000).toFixed(1) + 'K';
@@ -432,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme();
   };
 
+  updateAuthNav();
   fetchStreams();
 
   /* ================= CHAT FUNCTIONALITY ================= */
