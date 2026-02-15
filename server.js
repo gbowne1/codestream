@@ -8,6 +8,11 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import * as AuthControllers from './src/controllers/AuthControllers.js';
 import { auth, authorizeRole } from './src/middleware/auth.js';
+import {
+    registerValidation,
+    loginValidation,
+    handleValidationErrors,
+} from './src/validators/authValidators.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
@@ -32,6 +37,8 @@ const io = new Server(httpServer, {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Security headers (from master)
+app.use(helmet());
 // Enable CORS so your frontend can communicate with this API
 // Middleware setup (must be before routes)
 app.use(cors({ origin: 'http://localhost:3000' })); // SECURE CORS 
@@ -68,7 +75,7 @@ if (MONGODB_URI) {
   );
 }
 
-// Secure CORS with env based origin
+// Secure CORS with env-based origin (from master)
 app.use(
   cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
@@ -76,22 +83,42 @@ app.use(
   })
 );
 
-//  AUTH ROUTES 
-//  AUTH ROUTES
-app.post('/api/auth/register', AuthControllers.register);
-app.post('/api/auth/login', AuthControllers.login);
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "frame-ancestors 'self';"
+  );
+  next();
+});
 
-//  AUTH ROUTES
-app.post('/api/auth/register', AuthControllers.register);
-app.post('/api/auth/login', AuthControllers.login);
+
+// AUTH ROUTES (with express-validator)
+app.post('/api/auth/register', registerValidation, handleValidationErrors, AuthControllers.register);
+app.post('/api/auth/login', loginValidation, handleValidationErrors, AuthControllers.login);
 
 /**
  * @route GET /api/auth/me
  * @desc Gets the currently logged-in user's details (eg: username, role).
  * This endpoint demonstrates basic 'auth' middleware protection.
  */
+app.use(express.json());
+
+// DATABASE CONNECTION
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log('🟢 MongoDB connected successfully.'))
+  .catch((err) => console.error('🔴 MongoDB connection error:', err));
+//  AUTH ROUTES 
+//  AUTH ROUTES
+app.post('/api/auth/register', AuthControllers.register);
+app.post('/api/auth/login', AuthControllers.login);
+
+// AUTH ROUTES
+app.post('/api/auth/register', AuthControllers.register);
+app.post('/api/auth/login', AuthControllers.login);
 app.get('/api/auth/me', auth, AuthControllers.getUserDetails);
 
+// Admin route - FIXED: added missing });
 
 /**
  * @route GET /api/admin/dashboard
@@ -99,16 +126,17 @@ app.get('/api/auth/me', auth, AuthControllers.getUserDetails);
  * This demonstrates Role-Based Access Control.
  */
 app.get('/api/admin/dashboard', auth, authorizeRole(['admin']), (req, res) => {
-  // req.user is available here due to the 'auth' middleware
   res.json({ message: `Access granted, Admin ID: ${req.user.id}.` });
-});
+}); // ✅ CLOSING BRACE ADDED HERE
 
-/**
- * Root Route
- * This fixes the "Cannot GET /" error by providing a landing page.
- */
 app.get('/', (req, res) => {
   res.send(`
+    <div style="font-family: sans-serif; text-align: center; padding-top: 50px;">
+      <h1>🚀 DevStream API is Online</h1>
+      <p>The server is running correctly.</p>
+      <p>Access your data here: <a href="/api/streams">/api/streams</a></p>
+    </div>
+  `);
         <div style="font-family: sans-serif; text-align: center; padding-top: 50px;">
             <h1> DevStream API is Online</h1>
             <p>The server is running correctly.</p>
@@ -117,10 +145,7 @@ app.get('/', (req, res) => {
     `);
 });
 
-/**
- * API Endpoint: /api/streams
- * Reads the mock data from streams.json and returns it as JSON.
- */
+// Streams route - CLEAN VERSION FROM MASTER
 app.get('/api/streams', (req, res) => {
     const dataPath = join(__dirname, 'streams.json');
 
@@ -287,9 +312,103 @@ app.use((req, res) => {
   res.status(404).json({
     error: 'Route not found',
   });
+}); // ✅ CLOSING BRACE ADDED HERE
+
+// ============== WEBRTC SIGNALING SERVER ==============
+// Track active streams: { roomId: { broadcaster: socketId, viewers: [socketId] } }
+const activeStreams = new Map();
+
+// API: Get list of active live streams
+app.get('/api/live-streams', (req, res) => {
+  const streams = [];
+  activeStreams.forEach((value, key) => {
+    streams.push({ roomId: key, viewerCount: value.viewers.length });
+  });
+  res.json(streams);
 });
 
 httpServer.listen(PORT, () => {
+io.on('connection', (socket) => {
+  console.log(`[SOCKET] User connected: ${socket.id}`);
+
+  // Broadcaster starts a stream
+  socket.on('start-stream', (roomId) => {
+    if (activeStreams.has(roomId)) {
+      socket.emit('error', { message: 'Room already exists' });
+      return;
+    }
+    socket.join(roomId);
+    activeStreams.set(roomId, { broadcaster: socket.id, viewers: [] });
+    console.log(`[LIVE] Stream started: ${roomId} by ${socket.id}`);
+    socket.emit('stream-started', { roomId });
+  });
+
+  // Viewer joins a stream
+  socket.on('join-stream', (roomId) => {
+    const stream = activeStreams.get(roomId);
+    if (!stream) {
+      socket.emit('error', { message: 'Stream not found' });
+      return;
+    }
+    socket.join(roomId);
+    stream.viewers.push(socket.id);
+    console.log(`[VIEWER] ${socket.id} joined ${roomId}`);
+
+    // Notify broadcaster that a new viewer joined
+    io.to(stream.broadcaster).emit('viewer-joined', { viewerId: socket.id });
+  });
+
+  // WebRTC signaling: Offer
+  socket.on('offer', ({ roomId, offer, viewerId }) => {
+    io.to(viewerId).emit('offer', { offer, broadcasterId: socket.id });
+  });
+
+  // WebRTC signaling: Answer
+  socket.on('answer', ({ roomId, answer, broadcasterId }) => {
+    io.to(broadcasterId).emit('answer', { answer, viewerId: socket.id });
+  });
+
+  // WebRTC signaling: ICE Candidate
+  socket.on('ice-candidate', ({ roomId, candidate, targetId }) => {
+    io.to(targetId).emit('ice-candidate', { candidate, senderId: socket.id });
+  });
+
+  // Stop stream
+  socket.on('stop-stream', (roomId) => {
+    if (activeStreams.has(roomId)) {
+      io.to(roomId).emit('stream-ended');
+      activeStreams.delete(roomId);
+      console.log(`[ENDED] Stream ended: ${roomId}`);
+    }
+  });
+
+  // Disconnect handling
+  socket.on('disconnect', () => {
+    console.log(`[SOCKET] User disconnected: ${socket.id}`);
+
+    // Check all streams for this socket
+    activeStreams.forEach((stream, roomId) => {
+      if (stream.broadcaster === socket.id) {
+        // Broadcaster disconnected - end the stream for all viewers
+        io.to(roomId).emit('stream-ended', { reason: 'Broadcaster disconnected' });
+        activeStreams.delete(roomId);
+        console.log(`[ENDED] Stream ${roomId} ended (broadcaster disconnected)`);
+      } else if (stream.viewers.includes(socket.id)) {
+        // Viewer disconnected - remove from list and notify broadcaster
+        stream.viewers = stream.viewers.filter(id => id !== socket.id);
+        io.to(stream.broadcaster).emit('viewer-left', {
+          viewerId: socket.id,
+          viewerCount: stream.viewers.length
+        });
+        console.log(`[VIEWER] ${socket.id} left ${roomId}. Viewers remaining: ${stream.viewers.length}`);
+      }
+    });
+  });
+});
+
+httpServer.listen(PORT, () => {
+  console.log(`\n✅ Server successfully started!`);
+app.listen(PORT, () => {
     console.log(`\nServer successfully started!`);
     console.log(`Home: http://localhost:${PORT}`);
   console.log('\n✅ Server successfully started!');

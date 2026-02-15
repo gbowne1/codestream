@@ -3,6 +3,24 @@
  * Handles user registration
  */
 
+import { checkAuth } from './auth.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const registerForm = document.getElementById('registerForm');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const registerBtn = document.getElementById('registerBtn');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const messageAlert = document.getElementById('messageAlert');
+    const messageText = document.getElementById('messageText');
+
+    // Check if user is already logged in (validate token)
+    const isAuthenticated = await checkAuth();
+    if (isAuthenticated) {
+        window.location.href = '/';
+        return;
 document.addEventListener('DOMContentLoaded', () => {
   const registerForm = document.getElementById('registerForm');
   const usernameInput = document.getElementById('username');
@@ -135,6 +153,88 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+    /**
+     * Handle form submission
+     */
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideMessage();
+
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!username || !email || !password) {
+            showMessage('Please fill out all fields.');
+            return;
+        }
+
+        if (password.length < 6) {
+            showMessage('Password must be at least 6 characters.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            const rawText = await response.text();
+            let data = {};
+            try {
+                data = rawText ? JSON.parse(rawText) : {};
+            } catch (parseError) {
+                data = { message: rawText || 'Unexpected server response.' };
+            }
+
+            if (response.status === 201) {
+                // Success
+                showMessage('Account created successfully! Redirecting to login...', 'success');
+
+                // Store token if returned
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
+                } else {
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 1500);
+                }
+
+            } else if (response.status === 400) {
+                showMessage(data.message || 'Invalid input. Please check your details.');
+                setLoading(false);
+
+            } else if (response.status === 500) {
+                showMessage('Server error. Please try again later.');
+                setLoading(false);
+
+            } else {
+                showMessage(data.message || 'An unexpected error occurred.');
+                setLoading(false);
+            }
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            showMessage('Unable to connect to server. Please check your connection.');
+            setLoading(false);
+        }
+    });
+
+    // Hide message when user starts typing
+    usernameInput.addEventListener('input', hideMessage);
+    emailInput.addEventListener('input', hideMessage);
+    passwordInput.addEventListener('input', hideMessage);
   // Hide message when user starts typing
   usernameInput.addEventListener('input', hideMessage);
   emailInput.addEventListener('input', hideMessage);

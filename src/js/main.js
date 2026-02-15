@@ -1,3 +1,6 @@
+import { checkAuth, clearAuth } from './auth.js';
+// WebRTC-based streaming - no external player library needed
+
 document.addEventListener('DOMContentLoaded', () => {
   const drawerToggle = document.getElementById('drawerToggle');
   const drawer = document.getElementById('categoryDrawer');
@@ -8,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearSearch = document.getElementById('clearSearch');
   const previewContainer = document.getElementById('streamGrid');
   const popularTagsContainer = document.getElementById('popularTags');
+  const loginNav = document.getElementById('authNavLogin');
+  const logoutNav = document.getElementById('authNavLogout');
+  const logoutBtn = document.getElementById('logoutBtn');
 
   // 🔹 FILTER UI (future / optional)
   const categoryFilter = document.getElementById('categoryFilter');
@@ -16,6 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
   let allStreams = [];
 
   /* ================= HELPERS ================= */
+
+  const updateAuthNav = async () => {
+    const isAuthenticated = await checkAuth();
+    if (loginNav && logoutNav) {
+      loginNav.classList.toggle('d-none', isAuthenticated);
+      logoutNav.classList.toggle('d-none', !isAuthenticated);
+    }
+  };
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      clearAuth();
+      window.location.href = '/login.html';
+    });
+  }
 
   function formatViewers(count) {
     if (count >= 1000) return (count / 1000).toFixed(1) + 'K';
@@ -187,16 +208,122 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="stream-detail-overlay"></div>
       <div class="stream-detail-content">
         <button class="close-modal" aria-label="Close">&times;</button>
-        <img src="${stream.img}" class="img-fluid mb-3"/>
+        <div class="ratio ratio-16x9 mb-3 bg-black">
+            <video id="streamPlayer" controls autoplay playsinline class="w-100 h-100"></video>
+        </div>
         <h2 class="h5">${stream.title}</h2>
-        <p class="text-muted">${stream.user}</p>
+        <p class="text-muted status-text">Connecting to Live Stream...</p>
+        <p class="text-muted small">${stream.user}</p>
       </div>
     `;
 
     document.body.appendChild(modal);
 
+    const videoElement = modal.querySelector('#streamPlayer');
+    let socket = null;
+    let peerConnection = null;
+
+    // WebRTC Configuration
+    const ICE_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }];
+
+    // Dynamic import for Socket.IO client
+    import('socket.io-client').then(({ io }) => {
+      socket = io('http://localhost:3000');
+
+      socket.on('connect', () => {
+        console.log('Viewer connected to signaling server');
+        // Join the stream room using the stream user as roomId
+        socket.emit('join-stream', stream.user);
+      });
+
+      socket.on('offer', async ({ offer, broadcasterId }) => {
+        console.log('Received offer from broadcaster');
+        modal.querySelector('.status-text').textContent = 'Receiving stream...';
+
+        peerConnection = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+
+        peerConnection.ontrack = (event) => {
+          console.log('Received remote track');
+          videoElement.srcObject = event.streams[0];
+          modal.querySelector('.status-text').textContent = 'LIVE';
+          modal.querySelector('.status-text').classList.remove('text-muted');
+          modal.querySelector('.status-text').classList.add('text-danger');
+        };
+
+        peerConnection.onicecandidate = (event) => {
+          if (event.candidate) {
+            socket.emit('ice-candidate', {
+              roomId: stream.user,
+              candidate: event.candidate,
+              targetId: broadcasterId
+            });
+          }
+        };
+
+        // Monitor connection state for broadcaster disconnect
+        peerConnection.onconnectionstatechange = () => {
+          console.log('Viewer connection state:', peerConnection.connectionState);
+          if (peerConnection.connectionState === 'disconnected' ||
+            peerConnection.connectionState === 'failed') {
+            modal.querySelector('.status-text').textContent = 'Connection Lost';
+            modal.querySelector('.status-text').classList.remove('text-danger');
+            modal.querySelector('.status-text').classList.add('text-warning');
+          }
+        };
+
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        socket.emit('answer', { roomId: stream.user, answer, broadcasterId });
+      });
+
+      socket.on('ice-candidate', async ({ candidate }) => {
+        if (peerConnection && candidate) {
+          try {
+            await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+          } catch (err) {
+            console.error('Error adding ICE candidate:', err);
+          }
+        }
+      });
+
+      socket.on('stream-ended', () => {
+        modal.querySelector('.status-text').textContent = 'Stream Ended';
+        modal.querySelector('.status-text').classList.add('text-warning');
+      });
+
+      socket.on('error', ({ message }) => {
+        modal.querySelector('.status-text').textContent = message || 'Stream not found';
+        modal.querySelector('.status-text').classList.add('text-danger');
+      });
+
+      // Handle socket disconnect (server down, network loss)
+      socket.on('disconnect', () => {
+        console.log('Viewer disconnected from signaling server');
+        modal.querySelector('.status-text').textContent = 'Disconnected from server';
+        modal.querySelector('.status-text').classList.add('text-warning');
+      });
+
+      // Cleanup when viewer closes modal or leaves page
+      window.addEventListener('beforeunload', () => {
+        if (socket) {
+          socket.emit('leave-stream', stream.user);
+        }
+      });
+    }).catch(err => {
+      console.error('Failed to load socket.io-client:', err);
+      modal.querySelector('.status-text').textContent = 'Failed to connect';
+      modal.querySelector('.status-text').classList.add('text-danger');
+    });
+
     const close = () => {
       document.removeEventListener('keydown', escHandler);
+      if (peerConnection) {
+        peerConnection.close();
+      }
+      if (socket) {
+        socket.disconnect();
+      }
       modal.remove();
     };
 
@@ -324,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme();
   };
 
+  updateAuthNav();
   fetchStreams();
 });
 
