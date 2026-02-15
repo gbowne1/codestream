@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true,
+    match: [/.+\@.+\..+/, 'Please fill a valid email address'],
     match: [/.+@.+\..+/, 'Please fill a valid email address'],
   },
   // Store the hashed password
@@ -25,6 +26,15 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: [
+      'user',
+      'admin',
+      'moderator',
+      'vip',
+      'administrator',
+      'broadcaster',
+      'bot',
+    ],
     enum: ['user', 'admin'], // For future authorization
     default: 'user',
   },
