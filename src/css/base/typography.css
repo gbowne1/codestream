@@ -1,3 +1,37 @@
-body { ... }
-h1, h2, h3, h4, h5, h6 { ... }
-body.dark h1, ... { ... }
+/* =========================================
+   Typography Base
+   ========================================= */
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* =========================================
+   Headings
+   ========================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #000 !important;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode heading overrides */
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+  color: #eee !important;
+}
