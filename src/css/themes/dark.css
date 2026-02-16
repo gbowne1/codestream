@@ -1,5 +1,64 @@
+/* =========================================
+   Manual Dark Theme Overrides
+   ========================================= */
+
 body.dark {
   --color-background: #111;
   --color-text: #eee;
-  ...
+
+  --color-card-bg: #222;
+  --color-card-text: #eee;
+
+  --color-header-bg: #222;
+  --color-header-text: #eee;
+
+  --color-footer-bg: #222;
+  --color-footer-text: #eee;
+}
+
+/* Override Bootstrap's bg-light class in dark mode */
+body.dark.bg-light {
+  background-color: var(--color-background) !important;
+}
+
+/* Header overrides */
+body.dark header.bg-white {
+  background-color: var(--color-header-bg) !important;
+}
+
+body.dark header .nav-link {
+  color: #eee !important;
+}
+
+body.dark header .nav-link:hover,
+body.dark header .nav-link:focus {
+  color: #eee !important;
+}
+
+body.dark header a {
+  color: #eee !important;
+}
+
+body.dark header a:hover {
+  color: #eee !important;
+}
+
+/* Drawer overrides */
+body.dark #categoryDrawer {
+  background-color: #222;
+  color: #eee;
+}
+
+body.dark #categoryDrawer a {
+  color: #eee;
+}
+
+/* Badge overrides */
+body.dark .badge.bg-primary {
+  background-color: #4fc3f7;
+  color: #222;
+}
+
+body.dark .badge {
+  border-color: rgba(255, 255, 255, 0.15);
 }
