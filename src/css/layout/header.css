@@ -1,5 +1,60 @@
-header { ... }
-header .nav-link { ... }
-body.dark header .nav-link { ... }
-header a { ... }
-body.dark header a { ... }
+/* =========================================
+   Header
+   ========================================= */
+
+header {
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Override Bootstrap's bg-white class in dark mode */
+body.dark header.bg-white {
+  background-color: var(--color-header-bg) !important;
+}
+
+/* =========================================
+   Navigation Links
+   ========================================= */
+
+header .nav-link {
+  color: #000 !important;
+}
+
+header .nav-link:hover,
+header .nav-link:focus {
+  color: #000 !important;
+  opacity: 0.7;
+}
+
+/* Dark mode nav links */
+body.dark header .nav-link {
+  color: #eee !important;
+}
+
+body.dark header .nav-link:hover,
+body.dark header .nav-link:focus {
+  color: #eee !important;
+}
+
+/* =========================================
+   Header Anchor Overrides
+   ========================================= */
+
+header a {
+  color: #000 !important;
+}
+
+header a:hover {
+  color: #000 !important;
+}
+
+body.dark header a {
+  color: #eee !important;
+}
+
+body.dark header a:hover {
+  color: #eee !important;
+}
