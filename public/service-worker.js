@@ -1,5 +1,5 @@
 // service-worker.js
-kipconst CACHE_NAME = 'devstream-v1';
+const CACHE_NAME = 'devstream-v1';
 const CACHE_NAME = "devstream-v2";
 
 // List of resources to cache
