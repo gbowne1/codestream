@@ -1,0 +1,5 @@
+header { ... }
+header .nav-link { ... }
+body.dark header .nav-link { ... }
+header a { ... }
+body.dark header a { ... }
