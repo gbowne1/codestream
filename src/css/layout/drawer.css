@@ -1,0 +1,4 @@
+#categoryDrawer { ... }
+#categoryDrawer.open { ... }
+body.dark #categoryDrawer { ... }
+#drawerOverlay { ... }
