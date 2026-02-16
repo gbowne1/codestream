@@ -1,1 +1,11 @@
-footer { ... }
+/* =========================================
+   Footer
+   ========================================= */
+
+footer {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
