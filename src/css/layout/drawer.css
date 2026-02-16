@@ -1,4 +1,44 @@
-#categoryDrawer { ... }
-#categoryDrawer.open { ... }
-body.dark #categoryDrawer { ... }
-#drawerOverlay { ... }
+/* =========================================
+   Category Drawer
+   ========================================= */
+
+#categoryDrawer {
+  width: 280px;
+  transform: translateX(-100%);
+  transition:
+    transform 0.3s ease-in-out,
+    visibility 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1050;
+}
+
+#categoryDrawer.open {
+  transform: translateX(0);
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Dark mode drawer appearance */
+body.dark #categoryDrawer {
+  background-color: #222;
+  color: #eee;
+}
+
+body.dark #categoryDrawer a {
+  color: #eee;
+}
+
+/* =========================================
+   Drawer Overlay
+   ========================================= */
+
+#drawerOverlay {
+  display: none;
+  z-index: 1040;
+}
+
+#drawerOverlay.show {
+  display: block;
+}
