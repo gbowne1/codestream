@@ -1,13 +1,50 @@
+/* =========================================
+   Base Variables
+   ========================================= */
+
 :root {
-  --font-base: ...;
+  /* Typography */
+  --font-base:
+    'Roboto', 'OpenSans', 'Lato', 'Montserrat', 'Noto Sans', 'Oswald',
+    'Poppins', 'Raleway', system-ui, -apple-system, sans-serif;
+
+  /* Brand Colors */
   --primary: #4fc3f7;
+
+  /* Light Theme Defaults */
   --color-background: #fff;
-  ...
+  --color-text: #000;
+
+  --color-card-bg: #fff;
+  --color-card-text: #000;
+
+  --color-header-bg: #fff;
+  --color-header-text: #000;
+
+  --color-footer-bg: #f8f9fa;
+  --color-footer-text: #000;
+
+  /* Shared UI */
+  --radius: 0.5rem;
 }
+
+/* =========================================
+   System Dark Mode Defaults
+   (prefers-color-scheme: dark)
+   ========================================= */
 
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: #111;
-    ...
+    --color-text: #eee;
+
+    --color-card-bg: #222;
+    --color-card-text: #eee;
+
+    --color-header-bg: #222;
+    --color-header-text: #eee;
+
+    --color-footer-bg: #222;
+    --color-footer-text: #eee;
   }
 }
