@@ -1,0 +1,50 @@
+/* =========================================
+   Badge Overrides
+   ========================================= */
+
+/* Primary badge in dark mode */
+body.dark .badge.bg-primary {
+  background-color: #4fc3f7;
+  color: #222;
+}
+
+/* General badge border in dark mode */
+body.dark .badge {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================================
+   Tag Badges
+   ========================================= */
+
+.tag-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-badge:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   Tag Filters
+   ========================================= */
+
+.tag-filter {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-filter:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.tag-filter:active {
+  transform: scale(0.98);
+}

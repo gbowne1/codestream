@@ -1,0 +1,46 @@
+/* =========================================
+   Card Component
+   ========================================= */
+
+.card {
+  background-color: var(--color-card-bg);
+  color: var(--color-card-text);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.card-text {
+  color: var(--color-card-text);
+}
+
+.card-title {
+  color: var(--color-card-text);
+}
+
+/* Viewer count + shared text overrides */
+.viewer-count,
+.card-text,
+.card-title {
+  color: var(--color-card-text);
+}
+
+/* =========================================
+   Viewer Count Pulse Animation
+   ========================================= */
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.viewer-number.pulse {
+  animation: pulse 0.3s ease-in-out;
+}

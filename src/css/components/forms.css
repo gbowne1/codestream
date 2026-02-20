@@ -1,0 +1,48 @@
+/* =========================================
+   Form Controls
+   ========================================= */
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.25rem rgba(79, 195, 247, 0.25);
+}
+
+.btn-auth {
+  padding: 12px;
+  font-weight: 600;
+}
+
+/* =========================================
+   Auth Page Form Layout
+   (Login / Register)
+   ========================================= */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--color-background);
+}
+
+.auth-card {
+  max-width: 450px;
+  width: 100%;
+}
+
+.auth-card .card {
+  border: none;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.auth-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

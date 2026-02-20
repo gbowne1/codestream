@@ -1,0 +1,18 @@
+/* =========================================
+   Grid Utilities
+   ========================================= */
+
+.column-gap {
+  -moz-column-gap: 1rem; /* Firefox legacy support */
+  column-gap: 1rem;
+}
+
+/* =========================================
+   Responsive Grid Adjustments
+   ========================================= */
+
+@media (max-width: 360px) {
+  .stream-preview {
+    grid-template-columns: 1fr;
+  }
+}
