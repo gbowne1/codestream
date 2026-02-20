@@ -42,9 +42,8 @@
     "node-media-server": "^4.2.4",
     "obs-websocket-js": "^5.0.7",
     "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.1.5",
     "morgan": "^1.10.1"
   },
   "devDependencies": {
