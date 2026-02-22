@@ -17,7 +17,6 @@ const UserSchema = new mongoose.Schema({
     lowercase: true,
     match: [/.+@.+\..+/, 'Please fill a valid email address'],
   },
-  // Store the hashed password
   password: {
     type: String,
     required: [true, 'Password is required'],
@@ -25,7 +24,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'], // For future authorization
+    enum: ['user', 'admin'],
     default: 'user',
   },
   createdAt: {
@@ -34,16 +33,13 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-// Hide the password and version key when converting to JSON
 UserSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-    delete returnedObject.password; // Never send the hash to the client!
+    delete returnedObject.password;
   },
 });
 
-const User = mongoose.model('User', UserSchema);
-
-export default User;
+export default mongoose.model('User', UserSchema);
