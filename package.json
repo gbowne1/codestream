@@ -1,0 +1,36 @@
+{
+  "name": "devstream-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.{js}\"",
+    "lint:fix": "eslint \"src/**/*.{js}\" --fix",
+    "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "bootstrap": "^5.3.3",
+    "flv.js": "^1.6.2",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "@babel/eslint-parser": "^7.28.6",
+    "prettier": "^3.2.5",
+    "vitest": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
+    "jsdom": "^28.0.0"
+  }
+}
