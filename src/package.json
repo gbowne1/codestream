@@ -1,0 +1,44 @@
+{
+  "name": "devstream-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module", 
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "lint": "eslint \"src/**/*.js\"",
+    "lint:fix": "eslint \"src/**/*.js\" --fix",
+    "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5",
+    "morgan": "^1.10.1",
+    "node-media-server": "^4.2.4",
+    "obs-websocket-js": "^5.0.7",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.28.6",
+    "@vitest/coverage-v8": "^4.0.18",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "mongodb-memory-server": "^11.0.1",
+    "prettier": "^3.2.5",
+    "supertest": "^7.2.2",
+    "vitest": "^4.0.18"
+  }
+}
